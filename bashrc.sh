@@ -39,3 +39,17 @@ export ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-b
 # region openjdk17
 export PATH=$PATH:/usr/local/opt/openjdk@17/bin
 # endregion
+
+# region ruby
+export PATH=$PATH:/usr/local/opt/ruby/bin:$HOME/.gem/bin
+
+# endregion
+
+# regijon flutter
+export PUB_HOSTED_URL="https://pub.flutter-io.cn"
+export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
+export PATH=$PATH:/usr/local/opt/ruby/bin
+## For compilers to find ruby you may need to set:
+##   export LDFLAGS="-L/usr/local/opt/ruby/lib"
+##   export CPPFLAGS="-I/usr/local/opt/ruby/include"
+# endregion

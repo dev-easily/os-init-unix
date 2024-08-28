@@ -65,3 +65,28 @@ function install_golang() {
 }
 install_golang
 # endregion
+
+# region ruby gem
+#sudo gem sources --add https://mirrors.tuna.tsinghua.edu.cn/rubygems/ --remove https://rubygems.org/
+# endregion
+
+# region flutter
+function install_flutter() {
+  export PUB_HOSTED_URL="https://pub.flutter-io.cn"
+  export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
+  #brew install --cask flutter
+  #brew install ruby
+  #export PATH=$PATH:/usr/local/opt/ruby/bin
+  #sudo gem install drb -v 2.0.6
+  #sudo gem install cocoapods
+  brew install cocoapods
+  #brew link --overwrite cocoapods
+  mkdir ~/dev
+  curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.1-stable.zip -o ~/dev/flutter_macos_3.24.1-stable.zip
+  unzip ~/dev/flutter_macos_3.24.1-stable.zip -d ~/dev/
+  rm -rf ~/dev/flutter_macos_3.24.1-stable.zip
+  ~/dev/flutter/bin/flutter doctor
+  ~/dev/flutter/bin/flutter config --no-analytics
+}
+install_flutter
+# endregion
