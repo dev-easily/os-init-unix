@@ -90,3 +90,11 @@ function install_flutter() {
 }
 install_flutter
 # endregion
+
+# region java
+function install_java() {
+  # need sudo
+  brew install oracle-jdk@17 
+}
+install_java
+# endregion
