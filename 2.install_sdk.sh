@@ -60,8 +60,9 @@ install_jdk
 # region golang
 function install_golang() {
   brew install go@1.23
-  go env -w GO111MODULE=on
-  go env -w GOPROXY=https://mirrors.aliyun.com/goproxy/,direct
+  go env -w GO111MODULE=on && \
+  go env -w GOPROXY=https://goproxy.io,direct && \
+  go install golang.org/x/tools/cmd/godoc@latest
 }
 install_golang
 # endregion
