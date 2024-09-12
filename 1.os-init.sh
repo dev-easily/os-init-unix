@@ -17,7 +17,7 @@ brew install bash
 ### git
 touch ~/.gitignore_global
 cat > ~/.gitignore_global <<EOF
-**/.DS_Store
+.DS_Store
 EOF
 git config --global core.excludesfile ~/.gitignore_global
 
