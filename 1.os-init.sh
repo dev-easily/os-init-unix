@@ -14,6 +14,13 @@ brew update
 ### bash
 brew install bash
 
+### git
+touch ~/.gitignore_global
+cat > ~/.gitignore_global <<EOF
+**/.DS_Store
+EOF
+git config --global core.excludesfile ~/.gitignore_global
+
 # 加载所有变量 zshrc -> .bash_profile -> .dev_rc
 \cp ./bashrc.sh ~/.dev_rc
 cat >> ~/.bash_profile <<EOF
