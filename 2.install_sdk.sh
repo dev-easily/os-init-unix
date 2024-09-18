@@ -48,15 +48,6 @@ function install_python() {
 install_python
 ## endregion
 
-## region openjdk17
-function install_jdk() {
-  brew install openjdk@17
-  mkdir ~/.m2
-  \cp ./mvn_settings.xml ~/.m2/settings.xml
-}
-install_jdk
-## endregion
-
 # region golang
 function install_golang() {
   brew install go@1.23
