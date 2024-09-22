@@ -20,6 +20,10 @@ cat > ~/.gitignore_global <<EOF
 .DS_Store
 EOF
 git config --global core.excludesfile ~/.gitignore_global
+cat >> ~/.gitconfig <<EOF
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
+EOF
 
 # 加载所有变量 zshrc -> .bash_profile -> .dev_rc
 \cp ./bashrc.sh ~/.dev_rc
