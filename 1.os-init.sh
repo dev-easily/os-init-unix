@@ -20,6 +20,7 @@ cat > ~/.gitignore_global <<EOF
 .DS_Store
 EOF
 git config --global core.excludesfile ~/.gitignore_global
+git config --global core.quotepath false
 cat >> ~/.gitconfig <<EOF
 [url "ssh://git@github.com/"]
   insteadOf = https://github.com/
