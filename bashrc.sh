@@ -48,7 +48,7 @@ export PATH=$PATH:/usr/local/opt/ruby/bin:$HOME/.gem/bin
 # region flutter
 export PUB_HOSTED_URL="https://pub.flutter-io.cn"
 export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
-export PATH=$PATH:~/dev/flutter/bin
+export PATH=$PATH:~/dev/flutter/bin:~/.pub-cache/bin
 ## For compilers to find ruby you may need to set:
 ##   export LDFLAGS="-L/usr/local/opt/ruby/lib"
 ##   export CPPFLAGS="-I/usr/local/opt/ruby/include"
