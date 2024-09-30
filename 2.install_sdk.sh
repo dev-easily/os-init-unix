@@ -81,6 +81,14 @@ function install_flutter() {
   ~/dev/flutter/bin/flutter config --no-analytics
 }
 install_flutter
+
+function config_cocoa_pods {
+  #https://mirrors.tuna.tsinghua.edu.cn/help/CocoaPods/
+  cd ~/.cocoapods/repos
+  pod repo remove master
+  git clone https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git master
+}
+# config_cocoa_pods
 # endregion
 
 # region java
