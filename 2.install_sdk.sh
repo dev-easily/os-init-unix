@@ -1,4 +1,5 @@
 #!/bin/bash
+. ~/.dev_rc
 
 ## region rust
 function install_rust() {
