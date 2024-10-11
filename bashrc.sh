@@ -1,5 +1,7 @@
 ## 把这个放到 home 目录并且让 bash_profile 引用
 
+alias ll="ls -al"
+
 # region homebrew
 export HOMEBREW_INSTALL_FROM_API=1
 export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
