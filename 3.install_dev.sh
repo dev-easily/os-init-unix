@@ -25,3 +25,15 @@ cat > ~/dev/open_terminal.sh <<EOF
 open -a Terminal \$(pwd)
 EOF
 chmod +x ~/dev/open_terminal.sh
+
+brew install --cask gimp
+brew install --cask incscape
+## kdenlive
+
+# git ssh proxy
+cat > ~/.ssh/config <<EOF
+Host github.com
+HostName github.com
+User git
+ProxyCommand nc -v -x 127.0.0.1:7897 %h %p
+EOF
