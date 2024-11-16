@@ -75,9 +75,9 @@ function install_flutter() {
   brew install cocoapods
   #brew link --overwrite cocoapods
   mkdir ~/dev
-  curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.1-stable.zip -o ~/dev/flutter_macos_3.24.1-stable.zip
-  unzip ~/dev/flutter_macos_3.24.1-stable.zip -d ~/dev/
-  rm -rf ~/dev/flutter_macos_3.24.1-stable.zip
+  curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.5-stable.zip -o ~/dev/flutter-latest.zip
+  unzip ~/dev/flutter-latest.zip -d ~/dev/
+  rm -rf ~/dev/flutter-latest.zip
   ~/dev/flutter/bin/flutter doctor
   ~/dev/flutter/bin/flutter config --no-analytics
 }
