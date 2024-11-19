@@ -59,3 +59,6 @@ export PATH=$PATH:~/dev/flutter/bin:~/.pub-cache/bin
 # region golang
 export PATH=$PATH:~/go/bin
 # endregion
+
+# core-utils for git-quick-stats
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"

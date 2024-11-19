@@ -37,3 +37,8 @@ HostName github.com
 User git
 ProxyCommand nc -v -x 127.0.0.1:7897 %h %p
 EOF
+
+# git-quick-stats
+brew install coreutils
+PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+brew install git-quick-stats
