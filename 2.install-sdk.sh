@@ -18,7 +18,7 @@ replace-with = 'ustc'
 [source.ustc]
 registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
 EOF
-
+  . ~/.dev_rc
   cargo install crm
 }
 install_rust
@@ -26,12 +26,15 @@ install_rust
 
 ## region node&electron
 function install_node() {
-  brew install npm pnpm
-  pnpm setup
-  npm config set registry https://registry.npmmirror.com
   curl -o- https://cdn.jsdelivr.net/gh/nvm-sh/nvm@v0.40.0/install.sh | bash
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
   export NVM_NODEJS_ORG_MIRROR=https://mirrors.ustc.edu.cn/node/
-  nvm install 20
+  nvm install --lts
+  npm config set registry https://registry.npmmirror.com
+  npm i -g pnpm
+  pnpm setup
   node -v
   npm -v
 }
@@ -40,6 +43,9 @@ install_node
 
 ## region python
 function install_python() {
+  if python --version|grep "Python 3";then
+      return
+  fi
   brew install python@3.12
   pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
   pip3 config set global.index https://mirrors.aliyun.com/pypi
@@ -51,7 +57,13 @@ install_python
 
 # region golang
 function install_golang() {
-  brew install go@1.23
+  if [ $(uname -n) == "fedora" ];then
+      sudo dnf install golang
+      return
+  fi
+  if command -v brew;then
+      brew install go@1.23
+  fi
   go env -w GO111MODULE=on && \
   go env -w GOPROXY=https://goproxy.io,direct && \
   go install golang.org/x/tools/cmd/godoc@latest
@@ -65,6 +77,14 @@ install_golang
 
 # region flutter
 function install_flutter() {
+  if [ $(uname -n) == "fedora" ];then
+      sudo dnf install clang cmake ninja-build gtk3-devel
+      echo "please install flutter sdk with vscode flutter plugin"
+      return
+  fi
+  if ! command -v brew;then
+      return
+  fi
   export PUB_HOSTED_URL="https://pub.flutter-io.cn"
   export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
   #brew install --cask flutter
