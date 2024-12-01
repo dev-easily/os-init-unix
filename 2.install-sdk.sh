@@ -82,24 +82,45 @@ function install_flutter() {
       echo "please install flutter sdk with vscode flutter plugin"
       return
   fi
-  if ! command -v brew;then
+
+  if lsb_release -a|grep Ubuntu;then
+      sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa
+      sudo apt-get install \
+      clang cmake git \
+      ninja-build pkg-config \
+      libgtk-3-dev liblzma-dev \
+      libstdc++-12-dev
       return
   fi
+
+
   export PUB_HOSTED_URL="https://pub.flutter-io.cn"
   export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
   #brew install --cask flutter
   #brew install ruby
   #export PATH=$PATH:/usr/local/opt/ruby/bin
   #sudo gem install drb -v 2.0.6
-  #sudo gem install cocoapods
-  brew install cocoapods
-  #brew link --overwrite cocoapods
+  #sudo gem install cocoapods 
   mkdir ~/dev
-  curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.5-stable.zip -o ~/dev/flutter-latest.zip
-  unzip ~/dev/flutter-latest.zip -d ~/dev/
-  rm -rf ~/dev/flutter-latest.zip
-  ~/dev/flutter/bin/flutter doctor
+
+  if [ $(uname) == "Darwin" ];then
+      brew install cocoapods           
+      curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.5-stable.zip -o ~/dev/flutter-latest.zip
+      unzip ~/dev/flutter-latest.zip -d ~/dev/
+      rm -rf ~/dev/flutter-latest.zip
+  fi
+
+  if lsb_release -a|grep Ubuntu;then
+      curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.5-stable.tar.xz -o ~/dev/flutter-latest.tar.xz
+      curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.5-stable.tar.xz -o ~/dev/flutter-latest.tar.xz
+      tar xvf ~/dev/flutter-latest.tar.xz -C ~/dev/
+      rm -rf ~/dev/flutter-latest.tar.xz
+  fi
+  #brew link --overwrite cocoapods
+
+  ~/dev/flutter/bin/flutter doctor  
   ~/dev/flutter/bin/flutter config --no-analytics
+  ~/dev/flutter/bin/flutter --disable-analytics
 }
 install_flutter
 
