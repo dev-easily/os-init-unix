@@ -21,3 +21,8 @@ sudo cat > /etc/init.d/xremap <<EOF
 #!/bin/bash
 nohup $HOME/.cargo/bin/xremap $HOME/.config/xremap.yml &
 EOF
+
+# onedrive
+sudo add-apt-repository --remove ppa:jstaf/onedriver
+sudo apt update
+sudo apt install onedriver
