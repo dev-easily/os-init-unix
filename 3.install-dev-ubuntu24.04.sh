@@ -17,3 +17,7 @@ sudo gpasswd -a `whoami` input
 echo 'KERNEL=="uinput", GROUP="input", TAG+="uaccess"' | sudo tee /etc/udev/rules.d/input.rules
 cp ./xremap.config.yml ~/.config/xremap.yml
 nohup sudo $HOME/.cargo/bin/xremap $HOME/.config/xremap.yml &
+sudo cat > /etc/init.d/xremap <<EOF
+#!/bin/bash
+nohup $HOME/.cargo/bin/xremap $HOME/.config/xremap.yml &
+EOF
