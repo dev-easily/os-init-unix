@@ -12,7 +12,7 @@ cat >> ~/.bash_profile <<EOF
 test -f ~/.dev_rc && source ~/.dev_rc
 EOF
 
-sudo apt install build-essential
+sudo apt install build-essential python-is-python3
 sudo apt install git curl
 sudo apt install connect-proxy
 
