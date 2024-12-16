@@ -51,7 +51,7 @@ export PATH=$PATH:/usr/local/opt/ruby/bin:$HOME/.gem/bin
 export PUB_HOSTED_URL="https://pub.flutter-io.cn"
 export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
 export PATH=$PATH:~/dev/flutter/bin:~/.pub-cache/bin
-if [ $(uname) == "Linux" ];then
+if [[ "$(uname)" == "Linux" ]];then
     export CHROME_EXECUTABLE="/opt/microsoft/msedge/msedge"
 fi
 ## For compilers to find ruby you may need to set:
@@ -65,3 +65,6 @@ export PATH=$PATH:~/go/bin
 
 # core-utils for git-quick-stats
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+
+# code
+export PATH=$PATH:'/Applications/Visual Studio Code.app/Contents/Resources/app/bin'
