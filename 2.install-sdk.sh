@@ -57,7 +57,7 @@ install_python
 
 # region golang
 function install_golang() {
-  if [ $(uname -n) == "fedora" ];then
+  if [[ "$(uname -n)" == "fedora" ]];then
       sudo dnf install golang
       return
   fi
@@ -77,7 +77,7 @@ install_golang
 
 # region flutter
 function install_flutter() {
-  if [ $(uname -n) == "fedora" ];then
+  if [[ "$(uname -n)" == "fedora" ]];then
       sudo dnf install clang cmake ninja-build gtk3-devel
       echo "please install flutter sdk with vscode flutter plugin"
       return
@@ -103,7 +103,7 @@ function install_flutter() {
   #sudo gem install cocoapods 
   mkdir ~/dev
 
-  if [ $(uname) == "Darwin" ];then
+  if [[ "$(uname)" == "Darwin" ]];then
       brew install cocoapods           
       curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.5-stable.zip -o ~/dev/flutter-latest.zip
       unzip ~/dev/flutter-latest.zip -d ~/dev/
