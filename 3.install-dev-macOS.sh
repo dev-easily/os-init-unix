@@ -30,12 +30,12 @@ brew install --cask gimp
 brew install --cask incscape
 ## kdenlive
 
-# git ssh proxy
+# git ssh proxy clash meta
 cat > ~/.ssh/config <<EOF
 Host github.com
 HostName github.com
 User git
-ProxyCommand nc -v -x 127.0.0.1:7897 %h %p
+ProxyCommand nc -v -x 127.0.0.1:7891 %h %p
 EOF
 
 # git-quick-stats
