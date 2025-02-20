@@ -1,4 +1,22 @@
 #!/bin/bash
+# if root, exit
+if [ $(id -u) -eq 0 ]; then
+    echo "Please run as normal user"
+    exit 1
+fi
+
+function is_macos() {
+  [[ "$(uname)" == "Darwin" ]]
+}
+
+function is_ubuntu() {
+  [[ "$(uname)" == "Linux" ]] && lsb_release -a|grep Ubuntu
+}
+
+function is_fedora() {
+  [[ "$(uname)" == "Linux" ]] && lsb_release -a|grep Fedora
+}
+
 . ~/.dev_rc
 
 ## region rust
@@ -20,6 +38,7 @@ registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
 EOF
   . ~/.dev_rc
   cargo install crm
+  crm use ustc-sparse
 }
 install_rust
 ## endregion rust
@@ -50,19 +69,31 @@ function install_python() {
   pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
   pip3 config set global.index https://mirrors.aliyun.com/pypi
   pip3 config set global.trusted-host mirrors.aliyun.com
-  pip3 install setuptools
 }
 install_python
 ## endregion
 
 # region golang
 function install_golang() {
-  if [[ "$(uname -n)" == "fedora" ]];then
-      sudo dnf install golang
+    if is_ubuntu;then
+      GO_VERSION=1.24.0
+      cd "/tmp" && \
+      wget https://golang.google.cn/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
+      sudo rm -rf /usr/local/go && sudo tar -C /opt -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
+      sudo ln -s "/opt/go/bin/"* "/usr/bin/" && \
+      go version && \
+      go env -w GO111MODULE=on && \
+      go env -w GOPROXY=https://goproxy.io,direct && \
+      go install golang.org/x/tools/cmd/godoc@latest && \
+      echo "export PATH=\$PATH:~/go/bin" >> ~/.bash_profile && \
+      rm -r "/tmp/"*
       return
   fi
-  if command -v brew;then
-      brew install go@1.23
+  if is_fedora;then
+      sudo dnf install golang
+  fi
+  if is_macos;then
+      brew install go@1.24
   fi
   go env -w GO111MODULE=on && \
   go env -w GOPROXY=https://goproxy.io,direct && \
@@ -77,22 +108,20 @@ install_golang
 
 # region flutter
 function install_flutter() {
-  if [[ "$(uname -n)" == "fedora" ]];then
+  if is_fedora;then
       sudo dnf install clang cmake ninja-build gtk3-devel
       echo "please install flutter sdk with vscode flutter plugin"
       return
   fi
 
-  if lsb_release -a|grep Ubuntu;then
-      sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa
-      sudo apt-get install \
+  if is_ubuntu;then
+      sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa \
       clang cmake git \
       ninja-build pkg-config \
       libgtk-3-dev liblzma-dev \
       libstdc++-12-dev
       return
   fi
-
 
   export PUB_HOSTED_URL="https://pub.flutter-io.cn"
   export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
@@ -103,14 +132,14 @@ function install_flutter() {
   #sudo gem install cocoapods 
   mkdir ~/dev
 
-  if [[ "$(uname)" == "Darwin" ]];then
+  if is_macos;then
       brew install cocoapods           
       curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.5-stable.zip -o ~/dev/flutter-latest.zip
       unzip ~/dev/flutter-latest.zip -d ~/dev/
       rm -rf ~/dev/flutter-latest.zip
   fi
 
-  if lsb_release -a|grep Ubuntu;then
+  if is_ubuntu;then
       curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.5-stable.tar.xz -o ~/dev/flutter-latest.tar.xz
       curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.5-stable.tar.xz -o ~/dev/flutter-latest.tar.xz
       tar xvf ~/dev/flutter-latest.tar.xz -C ~/dev/

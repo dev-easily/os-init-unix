@@ -21,10 +21,14 @@ cat > ~/.gitignore_global <<EOF
 EOF
 git config --global core.excludesfile ~/.gitignore_global
 git config --global core.quotepath false
+
+# git 的ssh代理在install-dev*.sh中
 cat >> ~/.gitconfig <<EOF
 [url "ssh://git@github.com/"]
   insteadOf = https://github.com/
 EOF
+
+# git 的https代理
 
 # 加载所有变量 zshrc -> .bash_profile -> .dev_rc
 \cp ./bashrc.sh ~/.dev_rc
