@@ -1,4 +1,7 @@
 #!/bin/zsh
+ROOT_DIR=$(cd "$(dirname "$0")"/../ && pwd)
+source $ROOT_DIR/common/common.sh
+
 ### brew
 export HOMEBREW_INSTALL_FROM_API=1
 export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"

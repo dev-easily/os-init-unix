@@ -1,9 +1,16 @@
 #!/bin/bash
-# github 加速 
-# git@gitee.com:easy-win/gh-proxy.git
-# 192.168.0.160
+ROOT_DIR=$(cd "$(dirname "$0")"/../ && pwd)
+source $ROOT_DIR/common/common.sh
 
+# 代理
+cat > ~/.ssh/config <<EOF
+Host github.com
+  HostName ssh.github.com
+  User git
+  ProxyCommand connect -S 127.0.0.1:7897 %h %p
+EOF
 
+# docker
 # docker 加速 https://github.com/For-Backup/CF-Workers-docker.io
 # yu@kde:~/Projects/gh-proxy$ sudo cat /etc/docker/daemon.json
 # {

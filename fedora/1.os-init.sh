@@ -1,4 +1,6 @@
 #!/bin/bash
+ROOT_DIR=$(cd "$(dirname "$0")"/../ && pwd)
+source $ROOT_DIR/common/common.sh
 
 git config --global core.quotepath false
 cat >> ~/.gitconfig <<EOF

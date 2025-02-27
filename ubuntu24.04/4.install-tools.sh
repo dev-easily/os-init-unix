@@ -1,13 +1,7 @@
-#!/bin/bash
-# 代理
-cat > ~/.ssh/config <<EOF
-Host github.com
-  HostName ssh.github.com
-  User git
-  ProxyCommand connect -S 127.0.0.1:7897 %h %p
-EOF
-
 # gnome tweak and `extensions` app
+ROOT_DIR=$(cd "$(dirname "$0")"/../ && pwd)
+source $ROOT_DIR/common/common.sh
+
 sudo apt install -y gnome-tweaks gnome-shell-extensions chrome-gnome-shell
 cargo install xremap --features gnome   # GNOME Wayland
 sudo gpasswd -a `whoami` input
