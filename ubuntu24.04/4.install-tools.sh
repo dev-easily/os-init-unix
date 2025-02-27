@@ -17,3 +17,11 @@ EOF
 sudo add-apt-repository --remove ppa:jstaf/onedriver
 sudo apt update
 sudo apt install onedriver
+
+# 远程桌面
+# 确保不要开启用户自动登录，可以修改 /etc/gdm3/custom.conf 文件，将 AutomaticLoginEnable 和 AutomaticLogin 两行注释
+sed -i 's/AutomaticLoginEnable=true/AutomaticLoginEnable=false/g' /etc/gdm3/custom.conf
+sed -i 's/AutomaticLogin=/#AutomaticLogin=/g' /etc/gdm3/custom.conf
+
+# 为了解决每次重启后，远程桌面密码都变化的问题，需要用户设置空密码
+# 搜索Passwords and Keys, 右键点击Login，选择修改密码，输入旧密码，然后设置空密码

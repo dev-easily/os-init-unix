@@ -12,6 +12,8 @@ Host github.com
 EOF
 
   git config --global core.quotepath false
+  git config --global user.name "tb"
+  git config --global user.email "travisbikkle@proton.me"
 
   cat >>~/.gitconfig <<EOF
 [url "ssh://git@github.com/"]
