@@ -27,12 +27,6 @@ sudo systemctl start ssh
 # 安装基础软件
 sudo apt install build-essential python-is-python3 curl connect-proxy -y
 
-git config --global core.quotepath false
-cat >> ~/.gitconfig <<EOF
-[url "ssh://git@github.com/"]
-  insteadOf = https://github.com/
-EOF
-
 # 加载所有变量 zshrc -> .bash_profile -> .dev_rc
 \cp $ROOT_DIR/config/bashrc.sh ~/.dev_rc
 cat >> ~/.bash_profile <<EOF

@@ -2,23 +2,56 @@
 ROOT_DIR=$(cd "$(dirname "$0")"/../ && pwd)
 source $ROOT_DIR/common/common.sh
 
-# 代理
-cat > ~/.ssh/config <<EOF
+function configure_git() {
+  # git SSH代理
+  cat >~/.ssh/config <<EOF
 Host github.com
   HostName ssh.github.com
   User git
   ProxyCommand connect -S 127.0.0.1:7897 %h %p
 EOF
 
-# docker
-# docker 加速 https://github.com/For-Backup/CF-Workers-docker.io
-# yu@kde:~/Projects/gh-proxy$ sudo cat /etc/docker/daemon.json
-# {
-#   "registry-mirrors": ["https://dh.jiasu.in", "https://hub.dockerx.org"]
-# }
+  git config --global core.quotepath false
 
-# docker 配合私有仓库，将一些常用镜像拉取到本地，push到自己私有仓库
-# 用哪个 linux 用户登录，就用哪个 push。如果你用了 sudo，就一直用 sudo。
-# sudo docker login --username=你的用户名 registry.cn-hangzhou.aliyuncs.com
-# sudo docker tag 镜像ID registry.cn-hangzhou.aliyuncs.com/你的命名空间/你的镜像仓库:版本号 
-# sudo docker push registry.cn-hangzhou.aliyuncs.com/你的命名空间/你的镜像仓库:版本号 
+  cat >>~/.gitconfig <<EOF
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
+EOF
+
+}
+
+# 阿里云镜像服务个人控制台 
+# https://cr.console.aliyun.com/cn-hangzhou/instance/dashboard
+# username=snzhaoyua
+# docker login --username="$username" registry.cn-hangzhou.aliyuncs.com
+# 拉取
+# docker pull registry.cn-hangzhou.aliyuncs.com/eliteunited/ubuntu:24.04 && docker tag registry.cn-hangzhou.aliyuncs.com/eliteunited/ubuntu:24.04 ubuntu:24.04
+# 推送
+# https://github.com/dev-easily/docker-auto-mirror
+function install_docker() {
+  repo_arch=$(uname -m)
+  if [ "$repo_arch" == "x86_64" ]; then
+    repo_arch="amd64"
+  else
+    repo_arch="arm64" # not tested
+  fi
+  sudo apt-get update
+  sudo apt-get remove docker.io containerd runc
+  sudo apt-get install curl software-properties-common -y
+  sudo curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+  sudo add-apt-repository "deb [arch=$repo_arch] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable" -y
+  sudo apt-get update
+  sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+  sudo systemctl start docker
+  sudo systemctl enable docker
+  sudo usermod -aG docker $USER
+  docker --version
+}
+
+function main() {
+  configure_git
+  install_docker
+  sudo apt install mysql-client-core-8.0 -y
+}
+
+main
