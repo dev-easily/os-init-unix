@@ -48,13 +48,13 @@ pip install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-blac
 npm install -g vim-language-server
 brew install universal-ctags
 
-# node
-brew install node
-
-# 图像
-brew install --cask gimp
-brew install --cask incscape
-## kdenlive
+# emacs
+brew install ripgrep
+brew tap railwaycat/emacsmacport
+brew install emacs-mac --with-modules
+ln -s /usr/local/opt/emacs-mac/Emacs.app /Applications/Emacs.app
+git clone --depth=1 git@github.com:travisbikkle/doomemacs.git ~/.emacs.d
+DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
 
 # git-quick-stats
 brew install coreutils

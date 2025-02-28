@@ -72,4 +72,5 @@ export PATH=$PATH:'/Applications/Visual Studio Code.app/Contents/Resources/app/b
 # python3
 test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate
 
-# neovim
+# doom emacs
+export DOOMGITCONFIG="$HOME"/.gitconfig
