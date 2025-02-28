@@ -37,9 +37,7 @@ chmod +x ~/dev/open_terminal.sh
 brew install neovim
 mkdir -p ~/.config/nvim
 git clone --depth=1 git@github.com:travisbikkle/nvim-config.git ~/.config/nvim
-brew install --cask font-hack-nerd-font
-brew install --cask font-jetbrains-mono-nerd-font
-brew install --cask font-fira-code-nerd-font
+# brew install --cask font-hack-nerd-font # 可以解压本仓库的字体
 brew install ripgrep
 /usr/local/bin/python3 -m venv ~/.config/nvim_python
 source ~/.config/nvim_python/bin/activate
@@ -53,7 +51,8 @@ brew install ripgrep
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-modules
 ln -s /usr/local/opt/emacs-mac/Emacs.app /Applications/Emacs.app
-git clone --depth=1 git@github.com:travisbikkle/doomemacs.git ~/.emacs.d
+git clone --depth=1 git@github.com:doomemacs/doomemacs.git ~/.emacs.d
+git clone git@github.com:travisbikkle/.dooom.d.git ~/
 DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
 
 # git-quick-stats
