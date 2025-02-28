@@ -70,4 +70,6 @@ export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH=$PATH:'/Applications/Visual Studio Code.app/Contents/Resources/app/bin'
 
 # python3
-alias python=`which python3`
+test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate
+
+# neovim

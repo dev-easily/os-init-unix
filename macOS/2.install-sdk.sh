@@ -62,13 +62,11 @@ install_node
 
 ## region python
 function install_python() {
-  if python --version|grep "Python 3";then
-      return
-  fi
-  brew install python@3.12
+  brew install python
   pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
   pip3 config set global.index https://mirrors.aliyun.com/pypi
   pip3 config set global.trusted-host mirrors.aliyun.com
+  /usr/local/bin/python3 --version
 }
 install_python
 ## endregion
