@@ -32,17 +32,20 @@ install_rust
 
 ## region node&electron
 function install_node() {
-  curl -o- https://cdn.jsdelivr.net/gh/nvm-sh/nvm@v0.40.0/install.sh | bash
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  export NVM_NODEJS_ORG_MIRROR=https://mirrors.ustc.edu.cn/node/
-  nvm install --lts
-  npm config set registry https://registry.npmmirror.com
-  npm i -g pnpm
-  pnpm setup
-  node -v
-  npm -v
+  NODE_VERSION=22.14.0
+  cd "/tmp" && \
+  wget https://registry.npmmirror.com/-/binary/node/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz && \
+  sudo tar xvf node-v${NODE_VERSION}-linux-x64.tar.xz -C /opt/ && \
+  sudo ln -s "/opt/node-v${NODE_VERSION}-linux-x64/bin/"* "/usr/bin/" && \
+  node --version && \
+  npm config set registry https://registry.npmmirror.com && \
+  #wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash - && \
+  #pnpm setup && \
+  sudo chown $USER: /opt/node* -R && \
+  npm install -g pnpm && \
+  echo "export PATH=\$PATH:/opt/node-v${NODE_VERSION}-linux-x64/bin/" >> ~/.bash_profile && \
+  npm install --global node-gyp && \
+  rm -r "/tmp/"*
 }
 install_node
 ## endregion
@@ -138,7 +141,7 @@ function install_flutter() {
   ~/dev/flutter/bin/flutter config --no-analytics
   ~/dev/flutter/bin/flutter --disable-analytics
 }
-install_flutter
+#install_flutter
 
 function config_cocoa_pods {
   #https://mirrors.tuna.tsinghua.edu.cn/help/CocoaPods/
@@ -147,12 +150,4 @@ function config_cocoa_pods {
   git clone https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git master
 }
 # config_cocoa_pods
-# endregion
-
-# region java
-function install_java() {
-  # need sudo
-  brew install oracle-jdk@17 
-}
-install_java
 # endregion

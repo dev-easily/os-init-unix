@@ -1,0 +1,10 @@
+[Unit]
+Description=Change Keyboard Mapping
+
+[Service]
+ExecStart=/home/yu/.cargo/bin/xremap /home/yu/.config/xremap.yml
+User=root
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target

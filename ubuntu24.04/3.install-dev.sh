@@ -54,7 +54,7 @@ function install_nvim() {
   curl -LO https://gh-proxy.com/github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
   sudo rm -rf /opt/nvim
   sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-  sudo apt install ripgrep python3.12-venv
+  sudo apt install ripgrep python3.12-venv -y
   mkdir -p ~/.config/nvim
   git clone --depth=1 git@github.com:travisbikkle/nvim-config.git ~/.config/nvim
   /usr/bin/python -m venv ~/.config/nvim_python/
@@ -62,11 +62,11 @@ function install_nvim() {
   pip install -U pynvim
   pip install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-black
   npm install -g vim-language-server
-  sudo apt install universal-ctags
+  sudo apt install universal-ctags -y
 }
 
 function install_doom_emacs() {
-  sudo apt install ripgrep emacs fd-find
+  sudo apt install ripgrep emacs fd-find -y
   git clone --depth=1 git@github.com:travisbikkle/doomemacs.git ~/.emacs.d
   git clone git@github.com:travisbikkle/.dooom.d.git ~/
   DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
@@ -79,6 +79,7 @@ function main() {
   sudo apt install mysql-client-core-8.0 -y
   install_nvim
   install_doom_emacs
+  sudo snap install vscode
 }
 
 main
