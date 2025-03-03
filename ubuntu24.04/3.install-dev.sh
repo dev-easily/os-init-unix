@@ -63,6 +63,7 @@ function install_nvim() {
   pip install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-black
   npm install -g vim-language-server
   sudo apt install universal-ctags -y
+  cargo component add rust-analyzer
 }
 
 function install_doom_emacs() {
