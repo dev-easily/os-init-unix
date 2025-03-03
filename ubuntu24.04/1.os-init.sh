@@ -29,6 +29,12 @@ sudo apt install build-essential python-is-python3 curl connect-proxy -y
 
 # 加载所有变量 zshrc -> .bash_profile -> .dev_rc
 \cp $ROOT_DIR/config/bashrc.sh ~/.dev_rc
-cat >> ~/.bash_profile <<EOF
+sed "/dev_rc/d" -i ~/.bashrc
+sed "/bashrc/d" -i ~/.bash_profile
+
+cat >> ~/.bashrc <<EOF
 test -f ~/.dev_rc && source ~/.dev_rc
+EOF
+cat >> ~/.bash_profile <<EOF
+test -f ~/.bashrc && source ~/.bashrc
 EOF
