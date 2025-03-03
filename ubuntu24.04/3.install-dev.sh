@@ -69,9 +69,11 @@ function install_nvim() {
 function install_doom_emacs() {
   sudo apt install ripgrep emacs fd-find -y
   git clone --depth=1 git@github.com:travisbikkle/doomemacs.git ~/.emacs.d
-  git clone git@github.com:travisbikkle/.dooom.d.git ~/
   DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
   ~/.emacs.d/bin/doom doctor
+  rm -rf ~/.doom.d/
+  git clone git@github.com:travisbikkle/.doom.d.git ~/
+  ~/.emacs.d/bin/doom sync
 }
 
 function main() {
