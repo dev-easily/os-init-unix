@@ -62,11 +62,11 @@ function install_emacs() {
   rm -rf ~/.doom.d/
   git clone git@github.com:travisbikkle/.dooom.d.git ~/
   ~/.emacs.d/bin/doom sync
+  # 字体，语法
   # M-x nerd-icons-install-fonts
   # M-x treesit-install-language-grammar typescript
   # M-x treesit-install-language-grammar rust
-  sed "/emacs/d" -i ~/.zprofile
-  echo "/usr/local/bin/emacs --daemon" >> ~/.zprofile
+  # 启动服务端
 }
 install_emacs
 
