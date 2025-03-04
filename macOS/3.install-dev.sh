@@ -57,6 +57,7 @@ DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
 rm -rf ~/.doom.d/
 git clone git@github.com:travisbikkle/.dooom.d.git ~/
 ~/.emacs.d/bin/doom sync
+# M-x nerd-icons-install-fonts
 
 # git-quick-stats
 brew install coreutils

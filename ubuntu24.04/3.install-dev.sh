@@ -74,6 +74,7 @@ function install_doom_emacs() {
   rm -rf ~/.doom.d/
   git clone git@github.com:travisbikkle/.doom.d.git ~/
   ~/.emacs.d/bin/doom sync
+  # M-x nerd-icons-install-fonts
 }
 
 function main() {
