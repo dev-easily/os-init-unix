@@ -48,6 +48,7 @@ brew install universal-ctags
 cargo component add rust-analyzer
 
 # emacs
+cargo component add rust-analyzer
 brew install ripgrep coreutils fd
 brew tap d12frosted/emacs-plus
 brew install emacs-plus
