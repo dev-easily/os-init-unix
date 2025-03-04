@@ -45,15 +45,18 @@ pip install -U pynvim
 pip install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-black
 npm install -g vim-language-server
 brew install universal-ctags
+cargo component add rust-analyzer
 
 # emacs
-brew install ripgrep
-brew tap railwaycat/emacsmacport
-brew install emacs-mac --with-modules
-ln -s /usr/local/opt/emacs-mac/Emacs.app /Applications/Emacs.app
+brew install ripgrep coreutils fd
+brew tap d12frosted/emacs-plus
+brew install emacs-plus
+ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
 git clone --depth=1 git@github.com:doomemacs/doomemacs.git ~/.emacs.d
-git clone git@github.com:travisbikkle/.dooom.d.git ~/
 DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
+rm -rf ~/.doom.d/
+git clone git@github.com:travisbikkle/.dooom.d.git ~/
+~/.emacs.d/bin/doom sync
 
 # git-quick-stats
 brew install coreutils
