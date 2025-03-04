@@ -59,6 +59,8 @@ rm -rf ~/.doom.d/
 git clone git@github.com:travisbikkle/.dooom.d.git ~/
 ~/.emacs.d/bin/doom sync
 # M-x nerd-icons-install-fonts
+# M-x treesit-install-language-grammar typescript
+# M-x treesit-install-language-grammar rust
 
 # git-quick-stats
 brew install coreutils

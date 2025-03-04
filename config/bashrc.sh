@@ -74,6 +74,10 @@ test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/a
 
 # doom emacs
 export DOOMGITCONFIG="$HOME"/.gitconfig
+# requires `emacs --daemon`
+alias em="emacsclient"
+alias et="emacsclient -t" # tui
+alias ec="emacsclient -c" # gui
 
 # nvim
 test -d /opt/nvim-linux-x86_64/ && export PATH=$PATH:/opt/nvim-linux-x86_64/bin/

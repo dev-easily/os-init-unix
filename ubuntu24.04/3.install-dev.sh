@@ -54,7 +54,7 @@ function install_nvim() {
   curl -LO https://gh-proxy.com/github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
   sudo rm -rf /opt/nvim
   sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-  sudo apt install ripgrep python3.12-venv -y
+  sudo apt install ripgrep python3.12-venv universal-ctags xclip -y
   mkdir -p ~/.config/nvim
   git clone --depth=1 git@github.com:travisbikkle/nvim-config.git ~/.config/nvim
   /usr/bin/python -m venv ~/.config/nvim_python/
@@ -62,12 +62,11 @@ function install_nvim() {
   pip install -U pynvim
   pip install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-black
   npm install -g vim-language-server
-  sudo apt install universal-ctags -y
   cargo component add rust-analyzer
 }
 
 function install_doom_emacs() {
-  sudo apt install ripgrep emacs fd-find -y
+  sudo apt install ripgrep emacs fd-find xclip xdotool xprop xwininfo -y
   git clone --depth=1 git@github.com:travisbikkle/doomemacs.git ~/.emacs.d
   DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
   ~/.emacs.d/bin/doom doctor
@@ -75,6 +74,8 @@ function install_doom_emacs() {
   git clone git@github.com:travisbikkle/.doom.d.git ~/
   ~/.emacs.d/bin/doom sync
   # M-x nerd-icons-install-fonts
+  # M-x treesit-install-language-grammar typescript
+  # M-x treesit-install-language-grammar rust
 }
 
 function main() {
