@@ -43,9 +43,11 @@ function install_node() {
   #pnpm setup && \
   sudo chown $USER: /opt/node* -R && \
   npm install -g pnpm && \
-  echo "export PATH=\$PATH:/opt/node-v${NODE_VERSION}-linux-x64/bin/" >> ~/.bash_profile && \
   npm install --global node-gyp && \
   rm -r "/tmp/"*
+  sed "/node-v*-linux/d" -i ~/.dev_rc
+  # npm i -g compatibility
+  echo "export PATH=\$PATH:/opt/node-v${NODE_VERSION}-linux-x64/bin/" >> ~/.dev_rc
 }
 install_node
 ## endregion
