@@ -76,6 +76,7 @@ function install_doom_emacs() {
   # M-x nerd-icons-install-fonts
   # M-x treesit-install-language-grammar typescript
   # M-x treesit-install-language-grammar rust
+  # M-x treesit-install-language-grammar bash
   #sed "/emacs/d" -i ~/.bash_profile
   #echo "/usr/local/bin/emacs --daemon" >> ~/.bash_profile
 }

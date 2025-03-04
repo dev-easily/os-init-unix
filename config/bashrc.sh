@@ -80,4 +80,7 @@ alias et="emacsclient -t" # tui
 alias ec="emacsclient -c" # gui
 
 # nvim
-test -d /opt/nvim-linux-x86_64/ && export PATH=$PATH:/opt/nvim-linux-x86_64/bin/
+# test -d /opt/nvim-linux-x86_64/ && export PATH=$PATH:/opt/nvim-linux-x86_64/bin/
+function nvim() {
+  (test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate && /opt/nvim-linux-x86_64/bin/nvim $@)
+}
