@@ -46,13 +46,15 @@ function install_nvim() {
   pip install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-black
   npm install -g vim-language-server
   brew install universal-ctags
-  cargo component add rust-analyzer
+  rustup component add rust-analyzer
+  #rustup +nightly component add rust-analyzer
 }
 install_nvim
 
 # emacs
 function install_emacs() {
-  cargo component add rust-analyzer
+  rustup component add rust-analyzer
+  #rustup +nightly component add rust-analyzer
   brew install ripgrep coreutils fd
   brew tap d12frosted/emacs-plus
   brew install emacs-plus
