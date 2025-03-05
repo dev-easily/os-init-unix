@@ -2,6 +2,25 @@
 
 alias ll="ls -al"
 
+function is_macos() {
+  [[ "$(uname)" == "Darwin" ]]
+}
+
+function is_ubuntu() {
+  [[ "$(uname)" == "Linux" ]] && lsb_release -a|grep Ubuntu
+}
+
+function is_fedora() {
+  [[ "$(uname)" == "Linux" ]] && lsb_release -a|grep Fedora
+}
+
+function is_zsh() {
+  [ -n "$ZSH_VERSION" ]
+}
+
+function is_bash() {
+  [ -n "$BASH_VERSION" ]
+}
 # region homebrew
 export HOMEBREW_INSTALL_FROM_API=1
 export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
@@ -69,9 +88,6 @@ export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 # code
 export PATH=$PATH:'/Applications/Visual Studio Code.app/Contents/Resources/app/bin'
 
-# python3
-test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate
-
 # doom emacs
 export DOOMGITCONFIG="$HOME"/.gitconfig
 # requires `emacs --daemon`
@@ -80,7 +96,29 @@ alias et="emacsclient -t" # tui
 alias ec="emacsclient -c" # gui
 
 # nvim
-# test -d /opt/nvim-linux-x86_64/ && export PATH=$PATH:/opt/nvim-linux-x86_64/bin/
 function nvim() {
-  (test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate && /opt/nvim-linux-x86_64/bin/nvim $@)
+  if is_macos;then
+    test -x /usr/local/bin/nvim &> /dev/null && (
+        test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate && /usr/local/bin/nvim $@
+    )
+  else
+    (test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate && /opt/nvim-linux-x86_64/bin/nvim $@)
+  fi
 }
+
+# PS1
+parse_git_branch() {
+  git branch 2> /dev/null
+}
+
+if is_zsh;then
+    setopt PROMPT_SUBST
+    precmd() {
+      PS1="%F{green}($(parse_git_branch))%f %1~$ "
+    }
+elif is_bash;then
+    set_bash_prompt() {
+      PS1="\033[32m(\$(parse_git_branch))\033[00m\w $ "
+    }
+    PROMPT_COMMAND=set_bash_prompt
+fi

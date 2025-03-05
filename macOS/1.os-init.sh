@@ -48,7 +48,7 @@ EOF
 sed "/bash_profile/d" -i ~/.zshrc
 
 cat >> ~/.zshrc <<EOF
-test -f ~/.bash_profile && source ~/.bash_profile
+test -f ~/.dev_rc && source ~/.dev_rc
 EOF
 
 . ~/.zshrc
