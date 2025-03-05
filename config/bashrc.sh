@@ -108,7 +108,7 @@ function nvim() {
 
 # PS1
 parse_git_branch() {
-  git branch 2> /dev/null
+  git branch 2> /dev/null || echo "not a git repo"
 }
 
 if is_zsh;then
