@@ -7,11 +7,11 @@ function is_macos() {
 }
 
 function is_ubuntu() {
-  [[ "$(uname)" == "Linux" ]] && lsb_release -a|grep Ubuntu
+  [[ "$(uname)" == "Linux" ]] && lsb_release -a|grep Ubuntu &> /dev/null
 }
 
 function is_fedora() {
-  [[ "$(uname)" == "Linux" ]] && lsb_release -a|grep Fedora
+  [[ "$(uname)" == "Linux" ]] && lsb_release -a|grep Fedora &> /dev/null
 }
 
 function is_zsh() {
