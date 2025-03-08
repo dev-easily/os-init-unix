@@ -108,20 +108,20 @@ function nvim() {
 
 # PS1
 parse_git_branch() {
-  git branch 2> /dev/null || echo "not a git repo"
+  __git_ps1
 }
 
 if is_zsh;then
     setopt PROMPT_SUBST
     precmd() {
-      PS1="%F{green}($(parse_git_branch))%f %F{yellow}%n@%m%f:%~ $ "
+      PS1="%F{green}$(parse_git_branch)%f %F{yellow}%n@%m%f:%~ $ "
     }
 elif is_bash;then
     set_bash_prompt() {
       if is_macos;then
-        PS1="\033[32m(\$(parse_git_branch))\033[00m \e[33m\u@\h\e[0m:\w $ "
+        PS1="\[\033[32m\]$(parse_git_branch)\[\033[00m\] \[\e[33m\]\u@\h\[\e[0m\]:\w $ "
       elif is_ubuntu;then
-        PS1="\033[32m(\$(parse_git_branch))\033[00m \e[33m\u@$(hostname -I|cut -d " " -f 1)\e[0m:\w $ "
+        PS1="\[\033[32m\]$(parse_git_branch)\[\033[00m\] \[\e[33m\]\u@$(hostname -I|cut -d ' ' -f 1)\[\e[0m\]:\w $ "
       fi
     }
     PROMPT_COMMAND=set_bash_prompt
