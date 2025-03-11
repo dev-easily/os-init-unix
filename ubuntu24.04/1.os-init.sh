@@ -14,7 +14,7 @@ function init_os() {
   echo "deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
   echo "deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse" >> /etc/apt/sources.list && \
   apt-get update && \
-  apt-get install curl git sudo vim wget locales libfreetype6 fontconfig ca-certificates jq -y && \
+  apt-get install curl git sudo vim wget locales libfreetype6 fontconfig ca-certificates jq openssh-server -y && \
   fc-cache --force && \
   ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
   echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
@@ -28,6 +28,7 @@ sudo systemctl start ssh
 sudo apt install build-essential python-is-python3 curl connect-proxy -y
 
 # 加载所有变量 zshrc -> .bash_profile -> .dev_rc
+> ~/.bash_profile
 \cp $ROOT_DIR/config/bashrc.sh ~/.dev_rc
 sed "/dev_rc/d" -i ~/.bashrc
 sed "/bashrc/d" -i ~/.bash_profile

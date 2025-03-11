@@ -62,11 +62,12 @@ function install_nvim() {
   pip install -U pynvim
   pip install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-black
   npm install -g vim-language-server
-  cargo component add rust-analyzer
+  . ~/.dev_rc
+  rustup component add rust-analyzer
 }
 
 function install_doom_emacs() {
-  sudo apt install ripgrep emacs fd-find xclip xdotool xprop xwininfo -y
+  sudo apt install ripgrep emacs fd-find xclip xdotool -y
   git clone --depth=1 git@github.com:travisbikkle/doomemacs.git ~/.emacs.d
   DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
   ~/.emacs.d/bin/doom doctor
@@ -77,14 +78,12 @@ function install_doom_emacs() {
   # M-x treesit-install-language-grammar typescript
   # M-x treesit-install-language-grammar rust
   # M-x treesit-install-language-grammar bash
-  #sed "/emacs/d" -i ~/.bash_profile
-  #echo "/usr/local/bin/emacs --daemon" >> ~/.bash_profile
 }
 
 function main() {
   configure_git
   install_docker
-  sudo apt install mysql-client-core-8.0 -y
+  #sudo apt install mysql-client-core-8.0 -y
   install_nvim
   install_doom_emacs
   sudo snap install vscode

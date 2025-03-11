@@ -7,7 +7,7 @@ function is_macos() {
 }
 
 function is_ubuntu() {
-  [[ "$(uname)" == "Linux" ]] && lsb_release -a|grep Ubuntu &> /dev/null
+  [[ "$(uname)" == "Linux" ]] && cat /etc/os-release|grep Ubuntu &> /dev/null
 }
 
 function is_fedora() {
