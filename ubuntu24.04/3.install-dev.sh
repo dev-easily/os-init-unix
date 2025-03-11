@@ -72,7 +72,7 @@ function install_doom_emacs() {
   DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
   ~/.emacs.d/bin/doom doctor
   rm -rf ~/.doom.d/
-  git clone git@github.com:travisbikkle/.doom.d.git ~/
+  git clone git@github.com:travisbikkle/.doom.d.git ~/.doom.d
   ~/.emacs.d/bin/doom sync
   # M-x nerd-icons-install-fonts
   # M-x treesit-install-language-grammar typescript
