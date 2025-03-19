@@ -2,7 +2,7 @@
 ROOT_DIR=$(cd "$(dirname "$0")"/../ && pwd)
 source $ROOT_DIR/common/common.sh
 
-sudo apt install -y gnome-tweaks gnome-shell-extensions chrome-gnome-shell
+sudo apt install -y gnome-tweaks gnome-shell-extensions chrome-gnome-shell gnome-shell-extension-manager
 cargo install xremap --features gnome   # GNOME Wayland
 sudo gpasswd -a `whoami` input
 echo 'KERNEL=="uinput", GROUP="input", TAG+="uaccess"' | sudo tee /etc/udev/rules.d/input.rules
