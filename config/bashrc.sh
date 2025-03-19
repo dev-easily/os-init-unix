@@ -115,7 +115,7 @@ parse_git_branch() {
 if is_zsh;then
     setopt PROMPT_SUBST
     precmd() {
-      PS1="%F{green}$(parse_git_branch)%f %F{yellow}%n@%m%f:%~ $ "
+      PS1="%F{green}$(parse_git_branch)%f %F{yellow}%n@%m%f:%c $ "
     }
 elif is_bash;then
     set_bash_prompt() {
