@@ -67,7 +67,7 @@ function install_nvim() {
 }
 
 function install_doom_emacs() {
-  sudo apt install ripgrep emacs fd-find xclip xdotool -y
+  sudo apt install ripgrep emacs fd-find xclip xdotool libtool-bin cmake -y
   git clone --depth=1 git@github.com:travisbikkle/doomemacs.git ~/.emacs.d
   DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
   ~/.emacs.d/bin/doom doctor

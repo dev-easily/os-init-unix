@@ -55,9 +55,8 @@ install_nvim
 function install_emacs() {
   rustup component add rust-analyzer
   #rustup +nightly component add rust-analyzer
-  brew install ripgrep coreutils fd
   brew tap d12frosted/emacs-plus
-  brew install emacs-plus
+  brew install ripgrep coreutils fd emacs-plus libvterm
   ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
   git clone --depth=1 git@github.com:doomemacs/doomemacs.git ~/.emacs.d
   DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
