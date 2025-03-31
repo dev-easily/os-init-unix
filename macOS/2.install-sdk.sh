@@ -130,17 +130,23 @@ function install_flutter() {
   #sudo gem install drb -v 2.0.6
   #sudo gem install cocoapods 
   mkdir ~/dev
+  flutter_version=3.29.2
+  arch=$(arch)
+  package_arch=""
+  
+  if [[ $arch == "arm64" ]];then
+    package_arch="_arm64"
+  fi
 
   if is_macos;then
-      brew install cocoapods           
-      curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.5-stable.zip -o ~/dev/flutter-latest.zip
+      brew install cocoapods
+      curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/macos/flutter_macos"${package_arch}"_"${flutter_version}"-stable.zip -o ~/dev/flutter-latest.zip    
       unzip ~/dev/flutter-latest.zip -d ~/dev/
       rm -rf ~/dev/flutter-latest.zip
   fi
 
   if is_ubuntu;then
-      curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.5-stable.tar.xz -o ~/dev/flutter-latest.tar.xz
-      curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.5-stable.tar.xz -o ~/dev/flutter-latest.tar.xz
+      curl https://storage.flutter-io.cn/flutter_infra_release/releases/stable/linux/flutter_macos"${package_arch}"_"${flutter_version}"-stable.tar.xz -o ~/dev/flutter-latest.tar.xz
       tar xvf ~/dev/flutter-latest.tar.xz -C ~/dev/
       rm -rf ~/dev/flutter-latest.tar.xz
   fi
