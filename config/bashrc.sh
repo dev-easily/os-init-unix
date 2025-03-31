@@ -27,6 +27,7 @@ export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottle
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
 export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+export PATH=$PATH:/opt/homebrew/bin
 # endregion
 
 # region rust
@@ -46,8 +47,9 @@ esac
 
 # region nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export NVM_INSTALL_DIR="/opt/homebrew/opt/nvm"
+[ -s "$NVM_INSTALL_DIR/nvm.sh" ] && \. "$NVM_INSTALL_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_INSTALL_DIR/bash_completion" ] && \. "$NVM_INSTALL_DIR/bash_completion"  # This loads nvm bash_completion
 export NVM_NODEJS_ORG_MIRROR=https://mirrors.ustc.edu.cn/node/
 # endregion
 

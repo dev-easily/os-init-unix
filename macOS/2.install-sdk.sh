@@ -45,7 +45,8 @@ install_rust
 
 ## region node&electron
 function install_node() {
-  curl -o- https://cdn.jsdelivr.net/gh/nvm-sh/nvm@v0.40.0/install.sh | bash
+  mkdir ~/.nvm
+  brew install nvm
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

@@ -11,6 +11,7 @@ export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebr
 
 git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git brew-install
 /bin/bash brew-install/install.sh
+export PATH=$PATH:/opt/homebrew/bin
 
 brew update
 
@@ -24,6 +25,8 @@ cat > ~/.gitignore_global <<EOF
 EOF
 git config --global core.excludesfile ~/.gitignore_global
 git config --global core.quotepath false
+(* main) yu@Mars:macOS $ git config --global user.name tb
+(* main) yu@Mars:macOS $ git config --global user.email travisbikkle@proton.me
 
 # git 的ssh代理在install-dev*.sh中
 cat >> ~/.gitconfig <<EOF
@@ -34,7 +37,7 @@ EOF
 # git 的https代理
 
 # 加载所有变量 zshrc -> .bash_profile -> .dev_rc
-\cp ./bashrc.sh ~/.dev_rc
+\cp "$ROOT_DIR"/config/bashrc.sh ~/.dev_rc
 sed "/dev_rc/d" -i ~/.bashrc
 cat >> ~/.bashrc <<EOF
 test -f ~/.dev_rc && source ~/.dev_rc

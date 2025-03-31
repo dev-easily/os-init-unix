@@ -4,7 +4,7 @@ cat > ~/.ssh/config <<EOF
 Host github.com
 HostName github.com
 User git
-ProxyCommand nc -v -x 127.0.0.1:7891 %h %p
+ProxyCommand nc -v -x 127.0.0.1:7890 %h %p
 EOF
 
 # db
@@ -17,9 +17,7 @@ brew install figma
 
 function install_wezterm {
   brew install --cask wezterm
-  brew tap homebrew/cask-fonts
-  brew install font-jetbrains-mono-nerd-font
-
+  brew install --cask font-jetbrains-mono-nerd-font
   mkdir -p $HOME/.config/wezterm
   git clone --depth=1 git@github.com:dev-easily/wezterm-config.git ~/.config/wezterm
 }
