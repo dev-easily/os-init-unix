@@ -59,7 +59,7 @@ function install_emacs() {
   git clone --depth=1 git@github.com:doomemacs/doomemacs.git ~/.emacs.d
   DOOMGITCONFIG=~/.gitconfig ~/.emacs.d/bin/doom install
   rm -rf ~/.doom.d/
-  git clone git@github.com:travisbikkle/.dooom.d.git ~/
+  git clone git@github.com:travisbikkle/.doom.d.git ~/.doom.d
   ~/.emacs.d/bin/doom sync
   # 字体，语法
   # M-x nerd-icons-install-fonts
