@@ -38,10 +38,10 @@ function install_nvim() {
   git clone --depth=1 git@github.com:travisbikkle/nvim-config.git ~/.config/nvim
   # brew install --cask font-hack-nerd-font # 可以解压本仓库的字体
   brew install ripgrep
-  python3 -m venv ~/.config/nvim_python
+  /opt/homebrew/bin/python3 -m venv ~/.config/nvim_python
   source ~/.config/nvim_python/bin/activate
-  pip install -U pynvim
-  pip install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-black
+  pip3 install -U pynvim
+  pip3 install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-black
   npm install -g vim-language-server
   brew install universal-ctags
   rustup component add rust-analyzer

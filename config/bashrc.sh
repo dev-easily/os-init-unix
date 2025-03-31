@@ -100,8 +100,8 @@ alias ec="emacsclient -c" # gui
 # nvim
 function nvim() {
   if is_macos;then
-    test -x /opt/homebrew/opt/bin/nvim &> /dev/null && (
-        test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate && /usr/local/bin/nvim $@
+    test -x /opt/homebrew/bin/nvim &> /dev/null && (
+        test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate && /opt/homebrew/bin/nvim $@
     )
   else
     (test -f ~/.config/nvim_python/bin/activate && source ~/.config/nvim_python/bin/activate && /opt/nvim-linux-x86_64/bin/nvim $@)
