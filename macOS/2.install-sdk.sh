@@ -63,7 +63,7 @@ install_node
 
 ## region python
 function install_python() {
-  brew install python
+  brew install pyenv
   pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
   pip3 config set global.index https://mirrors.aliyun.com/pypi
   pip3 config set global.trusted-host mirrors.aliyun.com
@@ -165,6 +165,8 @@ function config_cocoa_pods {
 function install_java() {
   # need sudo
   brew install oracle-jdk@17 
+  mkdir ~/.m2
+  cp ../config/mvn_settings.xml ~/.m2/settings.xml
 }
 install_java
 # endregion

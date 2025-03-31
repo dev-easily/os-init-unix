@@ -17,7 +17,7 @@ brew install figma
 
 function install_wezterm {
   brew install --cask wezterm
-  brew install --cask font-jetbrains-mono-nerd-font
+  brew install --cask font-hack-nerd-font
   mkdir -p $HOME/.config/wezterm
   git clone --depth=1 git@github.com:dev-easily/wezterm-config.git ~/.config/wezterm
 }
@@ -38,7 +38,7 @@ function install_nvim() {
   git clone --depth=1 git@github.com:travisbikkle/nvim-config.git ~/.config/nvim
   # brew install --cask font-hack-nerd-font # 可以解压本仓库的字体
   brew install ripgrep
-  /usr/local/bin/python3 -m venv ~/.config/nvim_python
+  python3 -m venv ~/.config/nvim_python
   source ~/.config/nvim_python/bin/activate
   pip install -U pynvim
   pip install 'python-lsp-server[all]' pylsp-mypy python-lsp-isort python-lsp-black
