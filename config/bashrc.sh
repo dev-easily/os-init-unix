@@ -129,3 +129,15 @@ elif is_bash;then
     }
     PROMPT_COMMAND=set_bash_prompt
 fi
+
+## proxy
+function proxy() {
+  if [[ "$1" == "on" ]];then
+    export HTTP_PROXY="http://127.0.0.1:7890"
+    export HTTP_PROXYS="http://127.0.0.1:7890"
+  else
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
+  fi
+  echo "HTTP_PROXY: $HTTP_PROXY"
+}
