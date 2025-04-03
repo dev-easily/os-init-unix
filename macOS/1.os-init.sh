@@ -9,9 +9,10 @@ export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bot
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
 export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
 
-git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git brew-install
+git clone --depth=1 https://mirrors.aliyun.com/homebrew/install.git brew-install
 /bin/bash brew-install/install.sh
-export PATH=$PATH:/opt/homebrew/bin
+eval $(/opt/homebrew/bin/brew shellenv)
+rm -rf brew-install
 
 brew update
 
