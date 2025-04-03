@@ -162,9 +162,9 @@ function config_cocoa_pods {
   #https://mirrors.tuna.tsinghua.edu.cn/help/CocoaPods/
   cd ~/.cocoapods/repos
   pod repo remove master
-  git clone https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git master
+  git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git master
 }
-# config_cocoa_pods
+config_cocoa_pods
 # endregion
 
 # region java
