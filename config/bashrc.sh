@@ -143,3 +143,6 @@ function proxy() {
   fi
   echo "HTTP_PROXY: $HTTP_PROXY"
 }
+
+## Huggingface-hub
+export HF_ENDPOINT="https://hf-mirror.com"
