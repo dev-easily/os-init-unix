@@ -136,7 +136,7 @@ fi
 function proxy() {
   if [[ "$1" == "on" ]];then
     export HTTP_PROXY="http://127.0.0.1:7890"
-    export HTTP_PROXYS="http://127.0.0.1:7890"
+    export HTTPS_PROXY="http://127.0.0.1:7890"
   else
     unset HTTP_PROXY
     unset HTTPS_PROXY
@@ -146,3 +146,6 @@ function proxy() {
 
 ## Huggingface-hub
 export HF_ENDPOINT="https://hf-mirror.com"
+export OLLAMA_MIRROR=https://mirror.aliyun.com/ollama
+export OLLAMA_MODELS=/Volumes/1T/LargeApplications/AIModels/
+## ollama pull nomic-embed-text
