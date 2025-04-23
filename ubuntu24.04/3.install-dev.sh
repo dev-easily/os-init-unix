@@ -44,6 +44,7 @@ function install_docker() {
   sudo add-apt-repository "deb [arch=$repo_arch] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable" -y
   sudo apt-get update
   sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+  echo '{"registry-mirrors":["https://docker.1ms.run"]}' | sudo tee /etc/docker/daemon.json > /dev/null
   sudo systemctl start docker
   sudo systemctl enable docker
   sudo usermod -aG docker $USER
