@@ -28,7 +28,9 @@ export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.aliyun.com/homebrew/brew.git"
 export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.aliyun.com/homebrew/homebrew-core.git"
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.aliyun.com/homebrew/homebrew-bottles"
 
-eval $(/opt/homebrew/bin/brew shellenv) #ckbrew
+if is_macos; then
+  eval $(/opt/homebrew/bin/brew shellenv) #ckbrew
+fi
 
 # endregion
 
@@ -156,7 +158,7 @@ export PYTHON_BUILD_MIRROR_URL="https://registry.npmmirror.com/-/binary/python"
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 if is_zsh;then
-  eval "$(pyenv init - zsh)"
+  command -v pyenv &> /dev/null && eval "$(pyenv init - zsh)"
 elif is_bash;then
-  eval "$(pyenv init - bash)"
+  command -v pyenv &> /dev/null && eval "$(pyenv init - bash)"
 fi
