@@ -153,3 +153,10 @@ export OLLAMA_MODELS=/Volumes/1T/LargeApplications/AIModels/
 ## pyenv download mirror
 export PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM=1
 export PYTHON_BUILD_MIRROR_URL="https://registry.npmmirror.com/-/binary/python"
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+if is_zsh;then
+  eval "$(pyenv init - zsh)"
+elif is_bash;then
+  eval "$(pyenv init - bash)"
+fi
