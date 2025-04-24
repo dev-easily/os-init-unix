@@ -43,8 +43,12 @@ function install_docker() {
   sudo curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
   sudo add-apt-repository "deb [arch=$repo_arch] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable" -y
   sudo apt-get update
-  sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
   echo '{"registry-mirrors":["https://docker.1ms.run"]}' | sudo tee /etc/docker/daemon.json > /dev/null
+
+  sudo groupadd docker
+  sudo usermod -aG docker $USER
+  newgrp docker
   sudo systemctl start docker
   sudo systemctl enable docker
   sudo usermod -aG docker $USER
