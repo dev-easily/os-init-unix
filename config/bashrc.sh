@@ -149,3 +149,7 @@ export HF_ENDPOINT="https://hf-mirror.com"
 export OLLAMA_MIRROR=https://mirror.aliyun.com/ollama
 export OLLAMA_MODELS=/Volumes/1T/LargeApplications/AIModels/
 ## ollama pull nomic-embed-text
+
+## pyenv download mirror
+export PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM=1
+export PYTHON_BUILD_MIRROR_URL="https://registry.npmmirror.com/-/binary/python"

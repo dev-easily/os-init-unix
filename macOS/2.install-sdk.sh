@@ -64,10 +64,15 @@ install_node
 ## region python
 function install_python() {
   brew install pyenv
+  export PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM=1
+  export PYTHON_BUILD_MIRROR_URL="https://registry.npmmirror.com/-/binary/python"
+  pyenv install 3.12
   pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
   pip3 config set global.index https://mirrors.aliyun.com/pypi
   pip3 config set global.trusted-host mirrors.aliyun.com
   /usr/local/bin/python3 --version
+  ## pyenv global 3.12
+  ## pyenv versions
 }
 install_python
 ## endregion
