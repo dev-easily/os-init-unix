@@ -44,7 +44,7 @@ function install_docker() {
   sudo add-apt-repository "deb [arch=$repo_arch] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable" -y
   sudo apt-get update
   sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-  cat > /etc/docker/daemon.json <<EOF
+  sudo cat > /etc/docker/daemon.json <<EOF
 {
   "registry-mirrors":["https://docker.1ms.run"],
   "log-driver": "local",
