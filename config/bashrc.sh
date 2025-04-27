@@ -128,7 +128,7 @@ elif is_bash;then
       if is_macos;then
         PS1="\[\033[32m\]$(parse_git_branch)\[\033[00m\] \[\e[33m\]\u@\h\[\e[0m\]:\w $ "
       elif is_ubuntu;then
-        PS1="\[\033[32m\]$(parse_git_branch)\[\033[00m\] \[\e[33m\]\u@$(hostname -I|cut -d ' ' -f 1)\[\e[0m\]:\w $ "
+        PS1="\[\033[32m\]$(parse_git_branch)\[\033[00m\] \[\e[33m\]\u@$(hostname -I|cut -d ' ' -f 1)\[\e[0m\]:\W $ "
       fi
     }
     PROMPT_COMMAND=set_bash_prompt
