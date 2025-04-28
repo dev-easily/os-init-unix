@@ -64,26 +64,18 @@ install_python
 
 # region golang
 function install_golang() {
-    if is_ubuntu;then
-      GO_VERSION=1.24.0
-      cd "/tmp" && \
-      wget https://golang.google.cn/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
-      sudo rm -rf /usr/local/go && sudo tar -C /opt -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
-      sudo ln -s "/opt/go/bin/"* "/usr/bin/" && \
-      go version && \
-      go env -w GO111MODULE=on && \
-      go env -w GOPROXY=https://goproxy.io,direct && \
-      go install golang.org/x/tools/cmd/godoc@latest && \
-      echo "export PATH=\$PATH:~/go/bin" >> ~/.bash_profile && \
-      rm -r "/tmp/"*
-      return
-  fi
-  if is_fedora;then
-      sudo dnf install golang
-  fi
-  if is_macos;then
-      brew install go@1.24
-  fi
+  GO_VERSION=1.24.0
+  cd "/tmp" && \
+  wget https://golang.google.cn/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
+  sudo rm -rf /usr/local/go && sudo tar -C /opt -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
+  sudo ln -s "/opt/go/bin/"* "/usr/bin/" && \
+  go version && \
+  go env -w GO111MODULE=on && \
+  go env -w GOPROXY=https://goproxy.io,direct && \
+  go install golang.org/x/tools/cmd/godoc@latest && \
+  echo "export PATH=\$PATH:~/go/bin" >> ~/.bash_profile && \
+  rm -r "/tmp/"*
+  
   go env -w GO111MODULE=on && \
   go env -w GOPROXY=https://goproxy.io,direct && \
   go install golang.org/x/tools/cmd/godoc@latest
