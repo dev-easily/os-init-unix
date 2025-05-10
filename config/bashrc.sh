@@ -149,7 +149,11 @@ function proxy() {
 ## Huggingface-hub
 export HF_ENDPOINT="https://hf-mirror.com"
 export OLLAMA_MIRROR=https://mirror.aliyun.com/ollama
-export OLLAMA_MODELS=/Volumes/1T/LargeApplications/AIModels/
+if is_macos;then
+  export OLLAMA_MODELS=/Volumes/1T/LargeApplications/AIModels/
+else
+  export OLLAMA_MODELS=${HOME}/AIModels/
+fi
 ## ollama pull nomic-embed-text
 
 ## pyenv download mirror
