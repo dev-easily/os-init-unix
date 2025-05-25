@@ -26,8 +26,8 @@ cat > ~/.gitignore_global <<EOF
 EOF
 git config --global core.excludesfile ~/.gitignore_global
 git config --global core.quotepath false
-(* main) yu@Mars:macOS $ git config --global user.name tb
-(* main) yu@Mars:macOS $ git config --global user.email travisbikkle@proton.me
+git config --global user.name tb
+git config --global user.email travisbikkle@proton.me
 
 # git 的ssh代理在install-dev*.sh中
 cat >> ~/.gitconfig <<EOF
