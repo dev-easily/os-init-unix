@@ -9,15 +9,13 @@ sudo usermod -aG sudo $USER
 
 # 软件仓库，系统时区，系统语言
 function init_os() {
-  echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble main restricted universe multiverse" > /etc/apt/sources.list && \
-  echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
-  echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
-  echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-security main restricted universe multiverse" >> /etc/apt/sources.list && \
-  apt-get update && \
-  apt-get install curl git sudo vim wget locales libfreetype6 fontconfig ca-certificates jq openssh-server -y && \
-  fc-cache --force && \
-  ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-  echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
+  sudo sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/ubuntu.sources
+  sudo sed -i 's/security.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/ubuntu.sources
+  sudo apt-get update && \
+  sudo apt-get install curl git sudo vim wget locales libfreetype6 fontconfig ca-certificates jq openssh-server -y && \
+  sudo fc-cache --force && \
+  sudo ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
+  sudo echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
 }
 sudo bash -c 'init_os'
 

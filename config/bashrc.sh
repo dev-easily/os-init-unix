@@ -166,3 +166,6 @@ if is_zsh;then
 elif is_bash;then
   command -v pyenv &> /dev/null && eval "$(pyenv init - bash)"
 fi
+
+## uv
+UV_DEFAULT_INDEX="https://pypi.tuna.tsinghua.edu.cn/simple"
