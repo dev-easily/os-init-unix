@@ -14,7 +14,7 @@ function install_rust() {
   export RUSTUP_DIST_SERVER=https://rsproxy.cn
   export RUSTUP_UPDATE_ROOT=https://rsproxy.cn/rustup
 
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -qy
+  sh ./rustup-init.sh -y
 
   cat >>~/.cargo/config.toml <<EOF
 [source.crates-io]
@@ -54,7 +54,7 @@ install_node
 
 ## region python
 function install_python() {
-  sudo apt install python3-pip
+  sudo apt install python3-pip -y
   pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
   pip3 config set global.index https://mirrors.aliyun.com/pypi
   pip3 config set global.trusted-host mirrors.aliyun.com

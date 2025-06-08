@@ -96,9 +96,9 @@ function main() {
   configure_git
   install_docker
   #sudo apt install mysql-client-core-8.0 -y
-  install_nvim
-  install_doom_emacs
-  sudo snap install vscode
+  #install_nvim
+  #install_doom_emacs
+  #sudo snap install vscode
 }
 
 main
