@@ -8,7 +8,7 @@ function configure_git() {
 Host github.com
   HostName ssh.github.com
   User git
-  ProxyCommand connect -S 127.0.0.1:7897 %h %p
+  #ProxyCommand connect -S 127.0.0.1:7897 %h %p
 EOF
 
   git config --global core.quotepath false
