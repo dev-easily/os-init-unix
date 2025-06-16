@@ -27,7 +27,7 @@ function install_rust() {
   export RUSTUP_DIST_SERVER=https://rsproxy.cn
   export RUSTUP_UPDATE_ROOT=https://rsproxy.cn/rustup
 
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -qy
+  sh ./rustup-init.sh -y
 
   cat >>~/.cargo/config.toml <<EOF
 [source.crates-io]
@@ -66,12 +66,12 @@ function install_python() {
   brew install pyenv
   export PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM=1
   export PYTHON_BUILD_MIRROR_URL="https://registry.npmmirror.com/-/binary/python"
-  pyenv install 3.12
+  pyenv install 3.11
   pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
   pip3 config set global.index https://mirrors.aliyun.com/pypi
   pip3 config set global.trusted-host mirrors.aliyun.com
   /usr/local/bin/python3 --version
-  ## pyenv global 3.12
+  ## pyenv global 3.11
   ## pyenv versions
 }
 install_python
@@ -117,7 +117,8 @@ function install_flutter() {
   #export PATH=$PATH:/usr/local/opt/ruby/bin
   #sudo gem install drb -v 2.0.6
   #sudo gem install cocoapods 
-  mkdir ~/dev
+  mkdir /Volumes/1T/dev
+  sudo ln -s /Volumes/1T/dev /Users/yu/dev
   flutter_version=3.29.2
   arch=$(arch)
   package_arch=""
@@ -140,14 +141,17 @@ function install_flutter() {
   fi
   #brew link --overwrite cocoapods
 
+  ~/dev/flutter/bin/flutter config --android-sdk /Volumes/1T/Library/Android_SDK/
   ~/dev/flutter/bin/flutter doctor  
   ~/dev/flutter/bin/flutter config --no-analytics
   ~/dev/flutter/bin/flutter --disable-analytics
 }
+
 install_flutter
 
-function config_cocoa_pods {
+function config_cocoa_pods() {
   #https://mirrors.tuna.tsinghua.edu.cn/help/CocoaPods/
+  mkdir -p ~/.cocoapods/repos
   cd ~/.cocoapods/repos
   pod repo remove master
   git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git master

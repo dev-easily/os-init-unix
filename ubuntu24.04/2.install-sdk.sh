@@ -134,8 +134,9 @@ function install_flutter() {
 }
 #install_flutter
 
-function config_cocoa_pods {
+function config_cocoa_pods() {
   #https://mirrors.tuna.tsinghua.edu.cn/help/CocoaPods/
+  mkdir -p ~/.cocoapods/repos
   cd ~/.cocoapods/repos
   pod repo remove master
   git clone https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git master
