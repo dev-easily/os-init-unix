@@ -24,7 +24,7 @@ install_rust() {
     
     # 如果设置了外部开发目录，确保.cargo目录软链接存在
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
-        create_dev_symlink "cargo" "$HOME/.cargo" "$DEV_EXTERNAL_PATH"
+        create_dev_link "cargo"
     fi
     
     # 下载并运行安装脚本
@@ -80,7 +80,7 @@ install_nodejs() {
     
     # 如果设置了外部开发目录，确保.nvm目录软链接存在
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
-        create_dev_symlink "nvm" "$HOME/.nvm" "$DEV_EXTERNAL_PATH"
+        create_dev_link "nvm"
     else
         ensure_dir ~/.nvm
     fi
@@ -139,8 +139,8 @@ install_python() {
     
     # 如果设置了外部开发目录，确保相关目录软链接存在
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
-        create_dev_symlink "pyenv" "$HOME/.pyenv" "$DEV_EXTERNAL_PATH"
-        create_dev_symlink "pip" "$HOME/.pip" "$DEV_EXTERNAL_PATH"
+        create_dev_link "pyenv"
+        create_dev_link "pip"
     fi
     
     # 安装pyenv
@@ -201,14 +201,14 @@ install_golang() {
     
     # 如果设置了外部开发目录，确保go目录软链接存在
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
-        create_dev_symlink "go" "$HOME/go" "$DEV_EXTERNAL_PATH"
+        create_dev_link "go"
     fi
     
     # 使用Homebrew安装Go
     brew install go
     
     # 重新加载环境
-    export GOPATH=$HOME/go
+    export GOPATH=$HOME/.go
     export GOROOT=$(brew --prefix go)/libexec
     export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
     
@@ -249,7 +249,7 @@ install_java() {
     
     # 如果设置了外部开发目录，确保.m2目录软链接存在
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
-        create_dev_symlink "m2" "$HOME/.m2" "$DEV_EXTERNAL_PATH"
+        create_dev_link "m2"
     fi
     
     # 安装多个Java版本
@@ -317,7 +317,7 @@ install_ruby() {
     
     # 如果设置了外部开发目录，确保.rbenv目录软链接存在
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
-        create_dev_symlink "rbenv" "$HOME/.rbenv" "$DEV_EXTERNAL_PATH"
+        create_dev_link "rbenv"
     fi
     
     # 安装rbenv
@@ -363,7 +363,7 @@ install_flutter() {
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
         flutter_path="$DEV_EXTERNAL_PATH/flutter"
         # 创建软链接到 ~/.dev/flutter
-        create_dev_symlink "flutter" "$HOME/.dev/flutter" "$DEV_EXTERNAL_PATH"
+        create_dev_link "flutter"
     else
         ensure_dir ~/.dev
         flutter_path="$HOME/.dev/flutter"

@@ -32,9 +32,7 @@ export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebr
 
 if is_macos; then
   # 支持外置开发目录的Homebrew
-  if [ -L "/opt/homebrew" ] && [ -d "/opt/homebrew" ]; then
-    eval $(/opt/homebrew/bin/brew shellenv)
-  elif [ -d "/opt/homebrew" ]; then
+  if [ -L "/opt/homebrew" ] || [ -d "/opt/homebrew" ]; then
     eval $(/opt/homebrew/bin/brew shellenv)
   fi
 fi
@@ -111,7 +109,7 @@ fi
 
 # region golang
 # 支持外置开发目录的Go
-export GOPATH=$HOME/go
+export GOPATH=$HOME/.go
 if command -v go >/dev/null 2>&1; then
   export GOROOT=$(go env GOROOT 2>/dev/null)
 fi
@@ -207,11 +205,6 @@ function proxy() {
 ## Huggingface-hub
 export HF_ENDPOINT="https://hf-mirror.com"
 export OLLAMA_MIRROR=https://mirror.aliyun.com/ollama
-if is_macos;then
-  export OLLAMA_MODELS=/Volumes/1T/LargeApplications/AIModels/
-else
-  export OLLAMA_MODELS=${HOME}/AIModels/
-fi
 
 ## uv
 export UV_DEFAULT_INDEX="https://pypi.tuna.tsinghua.edu.cn/simple"

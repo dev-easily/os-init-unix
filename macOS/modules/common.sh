@@ -399,35 +399,61 @@ check_symlink_status() {
     fi
 }
 
+# 获取开发工具检测路径
+get_dev_tool_detection_paths() {
+    local external_dev_path="$1"
+    local tool_name="$2"
+    
+    case "$tool_name" in
+        "homebrew")
+            echo "$external_dev_path/homebrew/bin/brew"
+            ;;
+        "go")
+            echo "$external_dev_path/go/bin"
+            ;;
+        "cargo")
+            echo "$external_dev_path/cargo/bin/cargo"
+            ;;
+        "nvm")
+            echo "$external_dev_path/nvm/nvm.sh"
+            ;;
+        "pip")
+            echo "$external_dev_path/pip/pip.conf"
+            ;;
+        "m2")
+            echo "$external_dev_path/m2/repository"
+            ;;
+        "pyenv")
+            echo "$external_dev_path/pyenv/bin/pyenv"
+            ;;
+        "rbenv")
+            echo "$external_dev_path/rbenv/bin/rbenv"
+            ;;
+        "flutter")
+            echo "$external_dev_path/flutter/bin/flutter"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
 # 检测外部存储中已存在的软件
 detect_existing_software() {
     local external_dev_path="$1"
     
     log_info "检测外部存储中已存在的软件..."
     
-    # 定义软件检查路径
-    local homebrew_check="$external_dev_path/homebrew/bin/brew"
-    local go_check="$external_dev_path/go/bin"
-    local cargo_check="$external_dev_path/cargo/bin/cargo"
-    local nvm_check="$external_dev_path/nvm/nvm.sh"
-    local pip_check="$external_dev_path/pip/pip.conf"
-    local m2_check="$external_dev_path/m2/repository"
-    local pyenv_check="$external_dev_path/pyenv/bin/pyenv"
-    local rbenv_check="$external_dev_path/rbenv/bin/rbenv"
-    local flutter_check="$external_dev_path/flutter/bin/flutter"
-    
     local existing_software=()
     
     # 检查各个软件
-    [ -e "$homebrew_check" ] && existing_software+=("homebrew") && log_success "✓ 检测到已存在的 homebrew: $homebrew_check"
-    [ -e "$go_check" ] && existing_software+=("go") && log_success "✓ 检测到已存在的 go: $go_check"
-    [ -e "$cargo_check" ] && existing_software+=("cargo") && log_success "✓ 检测到已存在的 cargo: $cargo_check"
-    [ -e "$nvm_check" ] && existing_software+=("nvm") && log_success "✓ 检测到已存在的 nvm: $nvm_check"
-    [ -e "$pip_check" ] && existing_software+=("pip") && log_success "✓ 检测到已存在的 pip: $pip_check"
-    [ -e "$m2_check" ] && existing_software+=("m2") && log_success "✓ 检测到已存在的 m2: $m2_check"
-    [ -e "$pyenv_check" ] && existing_software+=("pyenv") && log_success "✓ 检测到已存在的 pyenv: $pyenv_check"
-    [ -e "$rbenv_check" ] && existing_software+=("rbenv") && log_success "✓ 检测到已存在的 rbenv: $rbenv_check"
-    [ -e "$flutter_check" ] && existing_software+=("flutter") && log_success "✓ 检测到已存在的 flutter: $flutter_check"
+    for tool_name in $(get_all_tools); do
+        local check_path=$(get_tool_detection_path "$external_dev_path" "$tool_name")
+        if [ -n "$check_path" ] && [ -e "$check_path" ]; then
+            existing_software+=("$tool_name")
+            log_success "✓ 检测到已存在的 $tool_name: $check_path"
+        fi
+    done
     
     if [ ${#existing_software[@]} -gt 0 ]; then
         echo -e "\n${CYAN}发现以下软件已存在于外部存储:${NC}"
@@ -667,29 +693,102 @@ create_dev_symlink() {
     log_success "已创建 $tool_name 软链接: $home_path -> $external_path"
 }
 
+# 获取开发工具路径映射
+# 开发工具路径映射 - 新增工具只需在这里添加一行
+declare -gA DEV_TOOLS=(
+    ["homebrew"]="/opt/homebrew"
+    ["go"]="$HOME/.go"
+    ["cargo"]="$HOME/.cargo"
+    ["nvm"]="$HOME/.nvm"
+    ["pip"]="$HOME/.pip"
+    ["m2"]="$HOME/.m2"
+    ["pyenv"]="$HOME/.pyenv"
+    ["rbenv"]="$HOME/.rbenv"
+    ["flutter"]="$HOME/.dev/flutter"
+)
+
+# 获取工具的本地路径
+get_tool_path() {
+    local tool_name="$1"
+    echo "${DEV_TOOLS[$tool_name]:-}"
+}
+
+# 获取所有工具名
+get_all_tools() {
+    echo "${!DEV_TOOLS[@]}"
+}
+
+# 创建开发工具软链接
+create_dev_link() {
+    local tool_name="$1"
+    local external_dev_path="${2:-$DEV_EXTERNAL_PATH}"
+    
+    local local_path=$(get_tool_path "$tool_name")
+    if [ -z "$local_path" ]; then
+        log_error "未知的开发工具: $tool_name"
+        return 1
+    fi
+    
+    create_dev_symlink "$tool_name" "$local_path" "$external_dev_path"
+}
+
+# 检测外部存储中已存在的软件（极简版 - 只检查目录是否存在）
+detect_existing_software() {
+    local external_dev_path="$1"
+    
+    log_info "检测外部存储中已存在的软件..."
+    
+    local existing_software=()
+    
+    # 检查各个软件目录是否存在
+    for tool_name in $(get_all_tools); do
+        local tool_dir="$external_dev_path/$tool_name"
+        if [ -d "$tool_dir" ]; then
+            existing_software+=("$tool_name")
+            log_success "✓ 检测到已存在的 $tool_name"
+        fi
+    done
+    
+    if [ ${#existing_software[@]} -gt 0 ]; then
+        echo -e "\n${CYAN}发现以下软件已存在于外部存储:${NC}"
+        for software in "${existing_software[@]}"; do
+            echo "  • $software"
+        done
+        echo ""
+        
+        if confirm_action "是否跳过已存在软件的安装"; then
+            export EXISTING_SOFTWARE="${existing_software[*]}"
+            log_info "将跳过已存在软件的安装"
+        else
+            export EXISTING_SOFTWARE=""
+            log_info "将重新安装所有软件"
+        fi
+    else
+        log_info "外部存储中未发现已安装的软件"
+        export EXISTING_SOFTWARE=""
+    fi
+}
+
+# 兼容旧API
+get_dev_tool_paths() {
+    if [ $# -eq 0 ]; then
+        get_all_tools
+    else
+        get_tool_path "$1"
+    fi
+}
+
 # 设置所有开发工具的软链接
 setup_all_dev_symlinks() {
     local external_dev_path="$1"
     
     log_info "设置开发工具目录软链接..."
     
-    # 定义需要软链接的目录
-    local dev_dirs=(
-        "go:$HOME/go"
-        "cargo:$HOME/.cargo"
-        "nvm:$HOME/.nvm"
-        "pip:$HOME/.pip"
-        "m2:$HOME/.m2"
-        "pyenv:$HOME/.pyenv"
-        "rbenv:$HOME/.rbenv"
-        "flutter:$HOME/.dev/flutter"
-    )
-    
-    for dir_info in "${dev_dirs[@]}"; do
-        local tool_name="${dir_info%%:*}"
-        local home_path="${dir_info##*:}"
-        
-        create_dev_symlink "$tool_name" "$home_path" "$external_dev_path"
+    # 获取所有工具名（除了homebrew，因为它通常不需要软链接到用户目录）
+    for tool in $(get_all_tools); do
+        if [ "$tool" != "homebrew" ]; then
+            create_dev_link "$tool" "$external_dev_path"
+        fi
     done
     
     log_success "所有开发工具目录软链接设置完成"
@@ -703,27 +802,8 @@ setup_configured_dev_symlinks() {
     
     log_info "根据配置文件设置开发工具目录软链接..."
     
-    # 定义工具名到路径的映射
-    declare -A tool_paths=(
-        ["homebrew"]="/opt/homebrew"
-        ["go"]="$HOME/go"
-        ["cargo"]="$HOME/.cargo"
-        ["nvm"]="$HOME/.nvm"
-        ["pip"]="$HOME/.pip"
-        ["m2"]="$HOME/.m2"
-        ["pyenv"]="$HOME/.pyenv"
-        ["rbenv"]="$HOME/.rbenv"
-        ["flutter"]="$HOME/.dev/flutter"
-    )
-    
     for tool_name in "${symlink_dirs[@]}"; do
-        local home_path="${tool_paths[$tool_name]}"
-        
-        if [ -n "$home_path" ]; then
-            create_dev_symlink "$tool_name" "$home_path" "$external_dev_path"
-        else
-            log_warning "未知的开发工具: $tool_name"
-        fi
+        create_dev_link "$tool_name" "$external_dev_path"
     done
     
     log_success "配置文件指定的开发工具目录软链接设置完成"
@@ -773,7 +853,7 @@ show_dev_directory_menu() {
     echo ""
     echo "将会设置以下目录的软链接:"
     echo "  • ~/.dev        -> 外部存储/dev"
-    echo "  • ~/go         -> 外部存储/dev/go"
+    echo "  • ~/.go         -> 外部存储/dev/go"
     echo "  • ~/.cargo     -> 外部存储/dev/cargo"
     echo "  • ~/.nvm       -> 外部存储/dev/nvm"
     echo "  • ~/.pip       -> 外部存储/dev/pip"

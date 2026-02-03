@@ -10,7 +10,7 @@ install_homebrew() {
         log_info "跳过 Homebrew 安装 (外部存储中已存在)"
         # 确保软链接存在
         if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
-            create_dev_symlink "homebrew" "/opt/homebrew" "$DEV_EXTERNAL_PATH"
+            create_dev_link "homebrew"
         fi
         # 设置环境变量
         eval $(/opt/homebrew/bin/brew shellenv)
@@ -26,7 +26,7 @@ install_homebrew() {
     
     # 如果设置了外部开发目录，先创建软链接
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
-        create_dev_symlink "homebrew" "/opt/homebrew" "$DEV_EXTERNAL_PATH"
+        create_dev_link "homebrew"
     fi
     
     # 设置中国镜像源
