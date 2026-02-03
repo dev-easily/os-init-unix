@@ -1,0 +1,259 @@
+{
+  "metadata": {
+    "name": "macOS开发环境配置",
+    "version": "2.0.0",
+    "description": "模块化的macOS开发环境自动安装配置",
+    "author": "DevSetup Team",
+    "created": "2026-02-02"
+  },
+  "system": {
+    "required_macos_version": "11.0",
+    "required_disk_space_gb": 20,
+    "check_xcode_tools": true,
+    "check_network": true
+  },
+  "mirrors": {
+    "homebrew": {
+      "api_domain": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api",
+      "bottle_domain": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles",
+      "brew_git": "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git",
+      "core_git": "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+    },
+    "rust": {
+      "dist_server": "https://rsproxy.cn",
+      "update_root": "https://rsproxy.cn/rustup",
+      "crates_registry": "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
+    },
+    "nodejs": {
+      "node_mirror": "https://mirrors.ustc.edu.cn/node/",
+      "npm_registry": "https://registry.npmmirror.com",
+      "electron_mirror": "https://npmmirror.com/mirrors/electron/"
+    },
+    "python": {
+      "build_mirror": "https://registry.npmmirror.com/-/binary/python",
+      "pip_index": "https://mirrors.aliyun.com/pypi/simple/",
+      "pip_trusted_host": "mirrors.aliyun.com"
+    },
+    "go": {
+      "proxy": "https://goproxy.cn,direct",
+      "sumdb": "sum.golang.google.cn"
+    },
+    "java": {
+      "maven_mirror": "https://maven.aliyun.com/repository/public"
+    },
+    "flutter": {
+      "pub_hosted_url": "https://pub.flutter-io.cn",
+      "storage_base_url": "https://storage.flutter-io.cn"
+    }
+  },
+  "packages": {
+    "system_init": {
+      "name": "系统初始化",
+      "description": "Homebrew、Git配置、Shell环境",
+      "required": true,
+      "components": [
+        {
+          "name": "homebrew",
+          "type": "package_manager",
+          "required": true
+        },
+        {
+          "name": "git",
+          "type": "tool",
+          "required": true
+        },
+        {
+          "name": "basic_tools",
+          "type": "tools",
+          "packages": ["bash", "curl", "wget", "vim", "tree", "htop", "jq", "unzip"]
+        }
+      ]
+    },
+    "languages": {
+      "name": "编程语言SDK",
+      "description": "各种编程语言的开发环境",
+      "required": false,
+      "components": [
+        {
+          "name": "rust",
+          "type": "language",
+          "version": "stable",
+          "tools": ["cargo-update", "cargo-tree", "cargo-audit"],
+          "targets": ["wasm32-unknown-unknown"]
+        },
+        {
+          "name": "nodejs",
+          "type": "language",
+          "version": "lts",
+          "package_managers": ["npm", "pnpm", "yarn"]
+        },
+        {
+          "name": "python",
+          "type": "language",
+          "versions": ["3.11", "3.12"],
+          "default": "3.12",
+          "tools": ["virtualenv", "pipenv", "poetry"]
+        },
+        {
+          "name": "golang",
+          "type": "language",
+          "version": "latest",
+          "tools": ["godoc", "goimports", "dlv", "staticcheck"]
+        },
+        {
+          "name": "java",
+          "type": "language",
+          "versions": ["11", "17", "21"],
+          "default": "17",
+          "build_tools": ["maven", "gradle"]
+        },
+        {
+          "name": "php",
+          "type": "language",
+          "version": "latest",
+          "tools": ["composer"]
+        },
+        {
+          "name": "ruby",
+          "type": "language",
+          "version": "latest",
+          "tools": ["bundler", "rails"]
+        },
+        {
+          "name": "flutter",
+          "type": "framework",
+          "version": "3.29.2",
+          "dependencies": ["cocoapods"]
+        }
+      ]
+    },
+    "dev_tools": {
+      "name": "开发工具",
+      "description": "编辑器、终端、数据库等开发工具",
+      "required": false,
+      "components": [
+        {
+          "name": "wezterm",
+          "type": "terminal",
+          "config_repo": "https://github.com/dev-easily/wezterm-config.git"
+        },
+        {
+          "name": "neovim",
+          "type": "editor",
+          "config_repo": "https://github.com/travisbikkle/nvim-config.git",
+          "dependencies": ["ripgrep", "universal-ctags"],
+          "language_servers": ["vim-language-server", "python-lsp-server", "rust-analyzer"]
+        },
+        {
+          "name": "emacs",
+          "type": "editor",
+          "variant": "emacs-plus",
+          "config": "doom-emacs",
+          "config_repo": "https://github.com/travisbikkle/.doom.d.git"
+        },
+        {
+          "name": "vscode",
+          "type": "editor",
+          "cask": "visual-studio-code"
+        },
+        {
+          "name": "databases",
+          "type": "tools",
+          "optional": ["mysql@8.0", "redis@6.2", "postgresql@14"]
+        }
+      ]
+    },
+    "utility_tools": {
+      "name": "实用工具",
+      "description": "图像处理、系统监控、改键等实用工具",
+      "required": false,
+      "components": [
+        {
+          "name": "image_tools",
+          "type": "applications",
+          "packages": ["gimp", "inkscape"]
+        },
+        {
+          "name": "system_monitor",
+          "type": "applications",
+          "packages": ["stats"]
+        },
+        {
+          "name": "input_tools",
+          "type": "applications",
+          "packages": ["karabiner-elements"]
+        },
+        {
+          "name": "api_tools",
+          "type": "applications",
+          "packages": ["apifox"]
+        },
+        {
+          "name": "design_tools",
+          "type": "applications",
+          "packages": ["figma"]
+        }
+      ]
+    }
+  },
+  "presets": {
+    "complete": {
+      "name": "完整安装",
+      "description": "安装所有可用组件",
+      "packages": ["system_init", "languages", "dev_tools", "utility_tools"]
+    }
+  },
+  "user_config": {
+    "dev_directory": {
+      "enabled": true,
+      "default_external_path": "/Volumes/1T/dev",
+      "alternative_paths": [
+        "/Volumes/External/dev",
+        "/Volumes/Storage/dev",
+        "/Users/Shared/dev"
+      ],
+      "symlink_dirs": [
+        "homebrew",
+        "go",
+        "cargo", 
+        "nvm",
+        "pip",
+        "m2",
+        "pyenv",
+        "rbenv",
+        "flutter"
+      ],
+      "backup_existing": true,
+      "auto_create_target": true,
+      "check_permissions": true,
+      "detect_existing": true
+    },
+    "git": {
+      "prompt_for_user": true,
+      "prompt_for_email": true,
+      "default_branch": "main",
+      "ssh_proxy": {
+        "enabled": true,
+        "host": "127.0.0.1",
+        "port": 7890
+      }
+    },
+    "shell": {
+      "config_file": "~/.dev_rc",
+      "backup_existing": true,
+      "add_aliases": true
+    },
+    "system_optimization": {
+      "show_hidden_files": true,
+      "show_file_extensions": true,
+      "disable_auto_correct": true,
+      "faster_animations": true
+    }
+  },
+  "logging": {
+    "level": "info",
+    "file": "~/.config/macos_setup.log",
+    "max_size_mb": 10,
+    "backup_count": 3
+  }
+}
