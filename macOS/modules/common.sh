@@ -592,7 +592,7 @@ check_xcode_tools() {
 # 开发目录管理
 setup_dev_directory() {
     local external_dev_path="$1"
-    local home_dev_link="$HOME/dev"
+    local home_dev_link="$HOME/.dev"
     
     log_info "设置开发目录管理..."
     
@@ -682,7 +682,7 @@ setup_all_dev_symlinks() {
         "m2:$HOME/.m2"
         "pyenv:$HOME/.pyenv"
         "rbenv:$HOME/.rbenv"
-        "flutter:$HOME/dev/flutter"
+        "flutter:$HOME/.dev/flutter"
     )
     
     for dir_info in "${dev_dirs[@]}"; do
@@ -713,7 +713,7 @@ setup_configured_dev_symlinks() {
         ["m2"]="$HOME/.m2"
         ["pyenv"]="$HOME/.pyenv"
         ["rbenv"]="$HOME/.rbenv"
-        ["flutter"]="$HOME/dev/flutter"
+        ["flutter"]="$HOME/.dev/flutter"
     )
     
     for tool_name in "${symlink_dirs[@]}"; do

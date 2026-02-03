@@ -363,10 +363,10 @@ install_flutter() {
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
         flutter_path="$DEV_EXTERNAL_PATH/flutter"
         # 创建软链接到 ~/.dev/flutter
-        create_dev_symlink "flutter" "$HOME/dev/flutter" "$DEV_EXTERNAL_PATH"
+        create_dev_symlink "flutter" "$HOME/.dev/flutter" "$DEV_EXTERNAL_PATH"
     else
         ensure_dir ~/.dev
-        flutter_path="$HOME/dev/flutter"
+        flutter_path="$HOME/.dev/flutter"
     fi
     
     # 获取Flutter版本信息
@@ -390,7 +390,7 @@ install_flutter() {
         unzip -q "$flutter_zip"
         rm "$flutter_zip"
         
-        export PATH="$HOME/dev/flutter/bin:$PATH"
+        export PATH="$HOME/.dev/flutter/bin:$PATH"
         
         # 安装CocoaPods (iOS开发需要)
         if ! command -v pod >/dev/null 2>&1; then
