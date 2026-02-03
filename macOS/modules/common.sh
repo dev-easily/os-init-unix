@@ -694,27 +694,79 @@ create_dev_symlink() {
 }
 
 # 获取开发工具路径映射
-# 开发工具路径映射 - 新增工具只需在这里添加一行
-declare -gA DEV_TOOLS=(
-    ["homebrew"]="/opt/homebrew"
-    ["go"]="$HOME/.go"
-    ["cargo"]="$HOME/.cargo"
-    ["nvm"]="$HOME/.nvm"
-    ["pip"]="$HOME/.pip"
-    ["m2"]="$HOME/.m2"
-    ["pyenv"]="$HOME/.pyenv"
-    ["rbenv"]="$HOME/.rbenv"
-    ["flutter"]="$HOME/.dev/flutter"
-)
+# 开发工具路径映射 - 从配置文件读取
+declare -gA DEV_TOOLS=()
+
+# 初始化开发工具配置
+init_dev_tools() {
+    if [ -z "${CONFIG_FILE:-}" ] || [ ! -f "${CONFIG_FILE:-}" ]; then
+        log_warning "配置文件不存在，使用默认工具配置"
+        # 默认配置
+        DEV_TOOLS=(
+            ["homebrew"]="/opt/homebrew"
+            ["go"]="$HOME/.go"
+            ["cargo"]="$HOME/.cargo"
+            ["nvm"]="$HOME/.nvm"
+            ["pip"]="$HOME/.pip"
+            ["m2"]="$HOME/.m2"
+            ["pyenv"]="$HOME/.pyenv"
+            ["rbenv"]="$HOME/.rbenv"
+            ["flutter"]="$HOME/.dev/flutter"
+        )
+        return
+    fi
+    
+    # 从配置文件读取工具配置
+    if command_exists jq; then
+        local tools_json=$(jq -r '.user_config.dev_directory.tools // {}' "$CONFIG_FILE" 2>/dev/null)
+        if [ "$tools_json" != "null" ] && [ "$tools_json" != "{}" ]; then
+            # 解析JSON并填充DEV_TOOLS数组
+            while IFS="=" read -r key value; do
+                if [ -n "$key" ] && [ -n "$value" ]; then
+                    # 展开环境变量
+                    value=$(eval echo "$value")
+                    DEV_TOOLS["$key"]="$value"
+                fi
+            done < <(echo "$tools_json" | jq -r 'to_entries[] | "\(.key)=\(.value)"' 2>/dev/null)
+        fi
+    fi
+    
+    # 如果没有读取到任何工具配置，使用默认配置
+    if [ ${#DEV_TOOLS[@]} -eq 0 ]; then
+        log_warning "未找到工具配置，使用默认配置"
+        DEV_TOOLS=(
+            ["homebrew"]="/opt/homebrew"
+            ["go"]="$HOME/.go"
+            ["cargo"]="$HOME/.cargo"
+            ["nvm"]="$HOME/.nvm"
+            ["pip"]="$HOME/.pip"
+            ["m2"]="$HOME/.m2"
+            ["pyenv"]="$HOME/.pyenv"
+            ["rbenv"]="$HOME/.rbenv"
+            ["flutter"]="$HOME/.dev/flutter"
+        )
+    fi
+}
 
 # 获取工具的本地路径
 get_tool_path() {
     local tool_name="$1"
+    
+    # 如果DEV_TOOLS为空，先初始化
+    if [ ${#DEV_TOOLS[@]} -eq 0 ]; then
+        init_dev_tools
+    fi
+    
     echo "${DEV_TOOLS[$tool_name]:-}"
 }
 
 # 获取所有工具名
 get_all_tools() {
+    # 如果DEV_TOOLS为空，先初始化
+    if [ ${#DEV_TOOLS[@]} -eq 0 ]; then
+        init_dev_tools
+    fi
+    
     echo "${!DEV_TOOLS[@]}"
 }
 
@@ -797,12 +849,14 @@ setup_all_dev_symlinks() {
 # 根据配置文件设置开发工具软链接
 setup_configured_dev_symlinks() {
     local external_dev_path="$1"
-    shift
-    local symlink_dirs=("$@")
     
     log_info "根据配置文件设置开发工具目录软链接..."
     
-    for tool_name in "${symlink_dirs[@]}"; do
+    # 初始化工具配置
+    init_dev_tools
+    
+    # 为所有配置的工具创建软链接
+    for tool_name in $(get_all_tools); do
         create_dev_link "$tool_name" "$external_dev_path"
     done
     
@@ -873,8 +927,6 @@ show_dev_directory_menu() {
 configure_dev_directory() {
     # 从配置文件读取设置
     local default_path="/Volumes/1T/dev"
-    local enabled=true
-    local symlink_dirs=()
     
     if command_exists jq && [ -f "$CONFIG_FILE" ]; then
         # 读取配置文件设置
@@ -889,19 +941,6 @@ configure_dev_directory() {
         if [ "$config_path" != "null" ] && [ -n "$config_path" ]; then
             default_path="$config_path"
         fi
-        
-        # 读取软链接目录列表
-        local dirs_json=$(jq -r '.user_config.dev_directory.symlink_dirs[]?' "$CONFIG_FILE" 2>/dev/null)
-        if [ -n "$dirs_json" ]; then
-            while IFS= read -r dir; do
-                [ -n "$dir" ] && symlink_dirs+=("$dir")
-            done <<< "$dirs_json"
-        fi
-    fi
-    
-    # 如果配置文件中没有定义，使用默认列表
-    if [ ${#symlink_dirs[@]} -eq 0 ]; then
-        symlink_dirs=("go" "cargo" "nvm" "pip" "m2" "pyenv" "rbenv" "flutter")
     fi
     
     show_dev_directory_menu
@@ -935,9 +974,13 @@ configure_dev_directory() {
         return 1
     fi
     
+    # 初始化工具配置并显示将要管理的工具
+    init_dev_tools
+    local tools_list=($(get_all_tools))
+    
     # 确认设置
     echo -e "\n${CYAN}将设置开发目录到: $external_dev_path${NC}"
-    echo -e "${CYAN}将管理以下目录: ${symlink_dirs[*]}${NC}"
+    echo -e "${CYAN}将管理以下工具: ${tools_list[*]}${NC}"
     
     if confirm_action "确认设置开发目录软链接"; then
         setup_dev_directory "$external_dev_path"
@@ -947,8 +990,8 @@ configure_dev_directory() {
             detect_existing_software "$external_dev_path"
         fi
         
-        # 使用配置文件中的目录列表设置软链接
-        setup_configured_dev_symlinks "$external_dev_path" "${symlink_dirs[@]}"
+        # 使用配置文件中的工具列表设置软链接
+        setup_configured_dev_symlinks "$external_dev_path"
         
         # 保存配置到环境文件
         local shell_rc="$HOME/.dev_rc"

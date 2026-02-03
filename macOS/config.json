@@ -66,18 +66,18 @@
     "dev_directory": {
       "enabled": true,
       "default_external_path": "/Volumes/1T/dev",
-      "symlink_dirs": [
-        "homebrew",
-        "go",
-        "cargo", 
-        "nvm",
-        "pip",
-        "m2",
-        "pyenv",
-        "rbenv",
-        "flutter"
-      ],
-      "detect_existing": true
+      "detect_existing": true,
+      "tools": {
+        "homebrew": "/opt/homebrew",
+        "go": "$HOME/.go",
+        "cargo": "$HOME/.cargo",
+        "nvm": "$HOME/.nvm",
+        "pip": "$HOME/.pip",
+        "m2": "$HOME/.m2",
+        "pyenv": "$HOME/.pyenv",
+        "rbenv": "$HOME/.rbenv",
+        "flutter": "$HOME/.dev/flutter"
+      }
     }
   }
 }
