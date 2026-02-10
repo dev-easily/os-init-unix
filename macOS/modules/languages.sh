@@ -235,7 +235,7 @@ install_golang() {
 
 # Java安装
 install_java() {
-    if command -v java >/dev/null 2>&1; then
+    if java --version >/dev/null 2>&1; then
         log_info "Java 已安装 ($(java -version 2>&1 | head -n 1))"
         return 0
     fi
@@ -247,13 +247,14 @@ install_java() {
     
     log_info "安装 Java..."
     
-    # 如果设置了外部开发目录，确保.m2目录软链接存在
+    # 如果设置了外部开发目录，确保.m2和.gradle目录软链接存在
     if [ -n "${DEV_EXTERNAL_PATH:-}" ]; then
         create_dev_link "m2"
+        create_dev_link "gradle"
     fi
     
     # 安装多个Java版本
-    local java_versions=("openjdk@11" "openjdk@17" "openjdk@21")
+    local java_versions=("openjdk@21")
     
     for version in "${java_versions[@]}"; do
         if ! brew list "$version" &>/dev/null; then
@@ -370,7 +371,7 @@ install_flutter() {
     fi
     
     # 获取Flutter版本信息
-    local flutter_version="3.29.2"
+    local flutter_version="3.38.9"
     local arch=$(uname -m)
     local package_arch=""
     
