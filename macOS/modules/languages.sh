@@ -396,6 +396,11 @@ install_flutter() {
         # 安装CocoaPods (iOS开发需要)
         if ! command -v pod >/dev/null 2>&1; then
             brew install cocoapods
+              cd ~/.cocoapods/repos
+              pod repo remove master
+              git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git master
+              rm -rf ~/.cocoapods/repos/trunk
+              mv ~/.cocoapods/repos/master ~/.cocoapods/repos/trunk
         fi
         
         # 配置Flutter
