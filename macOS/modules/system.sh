@@ -43,8 +43,10 @@ install_homebrew() {
     rm -rf brew-install
     
     # 更新
-    brew update
-    
+    brew cleanup    
+    brew update --force
+    brew tap --repair
+        
     log_success "Homebrew 安装完成"
 }
 
@@ -181,6 +183,18 @@ install_basic_tools() {
     log_success "基础工具安装完成"
 }
 
+# Docker安装
+install_docker() {
+    if brew list --cask docker &>/dev/null; then
+        log_info "Docker 已安装，跳过"
+        return 0
+    fi
+    
+    log_info "安装 Docker..."
+    brew install --cask docker
+    log_success "Docker 安装完成"
+}
+
 # 系统优化
 optimize_system() {
     log_info "优化系统设置..."
@@ -214,6 +228,7 @@ main() {
     
     install_homebrew
     install_basic_tools
+    install_docker
     configure_git
     configure_shell
     
