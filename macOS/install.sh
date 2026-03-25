@@ -102,10 +102,11 @@ system_check() {
 # 显示预设模式菜单
 show_preset_menu() {
     echo -e "\n${YELLOW}选择安装模式:${NC}"
-    echo "1. 完整安装 - 安装所有可用组件"
-    echo "2. 自定义安装 - 手动选择组件"
+    echo "1. 配置开发目录 - 将缓存和工具目录链接到外部存储 (推荐先运行)"
+    echo "2. 完整安装 - 安装所有可用组件"
+    echo "3. 自定义安装 - 手动选择组件"
     echo "0. 退出"
-    echo -n -e "\n${BLUE}请选择 [0-2]: ${NC}"
+    echo -n -e "\n${BLUE}请选择 [0-3]: ${NC}"
 }
 
 # 显示组件菜单
@@ -379,11 +380,18 @@ main() {
                 break
                 ;;
             1)
+                # 导入系统模块获取 configure_dev_directory 函数
+                if [ -f "$MODULES_DIR/system.sh" ]; then
+                    source "$MODULES_DIR/system.sh"
+                fi
+                configure_dev_directory
+                ;;
+            2)
                 if confirm_action "确认安装 完整安装"; then
                     install_preset "complete"
                 fi
                 ;;
-            2)
+            3)
                 custom_install
                 ;;
             *)

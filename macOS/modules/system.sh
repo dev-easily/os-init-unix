@@ -193,6 +193,9 @@ install_docker() {
     log_info "安装 Docker..."
     brew install --cask docker
     log_success "Docker 安装完成"
+
+    ## https://docker.1ms.run
+    ## docker login 
 }
 
 # 系统优化

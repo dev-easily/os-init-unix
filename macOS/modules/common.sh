@@ -400,10 +400,10 @@ check_symlink_status() {
 }
 
 # 获取开发工具检测路径
-get_dev_tool_detection_paths() {
+get_tool_detection_path() {
     local external_dev_path="$1"
     local tool_name="$2"
-    
+
     case "$tool_name" in
         "homebrew")
             echo "$external_dev_path/homebrew/bin/brew"
@@ -433,7 +433,8 @@ get_dev_tool_detection_paths() {
             echo "$external_dev_path/flutter/bin/flutter"
             ;;
         *)
-            echo ""
+            # 对于新增工具，检查目录本身是否存在即可
+            echo "$external_dev_path/$tool_name"
             ;;
     esac
 }
@@ -655,7 +656,9 @@ create_dev_symlink() {
     local tool_name="$1"
     local home_path="$2"
     local external_base="$3"
-    
+
+    # 确保删除所有引号
+    tool_name=$(echo "$tool_name" | tr -d '"''"')
     local external_path="$external_base/$tool_name"
     
     log_info "设置 $tool_name 目录软链接..."
@@ -703,7 +706,7 @@ init_dev_tools() {
         log_warning "配置文件不存在，使用默认工具配置"
         # 默认配置
         DEV_TOOLS=(
-            ["homebrew"]="/opt/homebrew"
+            # ["homebrew"]="/opt/homebrew"
             ["go"]="$HOME/.go"
             ["cargo"]="$HOME/.cargo"
             ["nvm"]="$HOME/.nvm"
@@ -719,17 +722,21 @@ init_dev_tools() {
     
     # 从配置文件读取工具配置
     if command_exists jq; then
-        local tools_json=$(jq -r '.user_config.dev_directory.tools // {}' "$CONFIG_FILE" 2>/dev/null)
-        if [ "$tools_json" != "null" ] && [ "$tools_json" != "{}" ]; then
-            # 解析JSON并填充DEV_TOOLS数组
-            while IFS="=" read -r key value; do
-                if [ -n "$key" ] && [ -n "$value" ]; then
-                    # 展开环境变量
-                    value=$(eval echo "$value")
-                    DEV_TOOLS["$key"]="$value"
-                fi
-            done < <(echo "$tools_json" | jq -r 'to_entries[] | "\(.key)=\(.value)"' 2>/dev/null)
-        fi
+        # 使用最简单可靠的方式：逐行读取所有key，用tr删除所有引号
+        local key value
+        for key in $(jq -r '.user_config.dev_directory.tools // {} | keys[]' "$CONFIG_FILE" 2>/dev/null); do
+            # 删除所有引号字符，这是最可靠的方法
+            key=$(echo "$key" | tr -d '"''"')
+            [ -z "$key" ] && continue
+            value=$(jq -r ".user_config.dev_directory.tools[\"$key\"]" "$CONFIG_FILE" 2>/dev/null)
+            [ -z "$value" ] && continue
+            [ "$value" = "null" ] && continue
+            # 删除所有引号字符
+            value=$(echo "$value" | tr -d '"''"')
+            # 展开环境变量
+            value=$(eval echo "$value")
+            DEV_TOOLS["$key"]="$value"
+        done
     fi
     
     # 如果没有读取到任何工具配置，使用默认配置
@@ -768,8 +775,15 @@ get_all_tools() {
     if [ ${#DEV_TOOLS[@]} -eq 0 ]; then
         init_dev_tools
     fi
-    
-    echo "${!DEV_TOOLS[@]}"
+
+    # 兼容 bash 和 zsh 获取关联数组键
+    if [ -n "$ZSH_VERSION" ]; then
+        # zsh
+        echo "${(k)DEV_TOOLS}"
+    else
+        # bash
+        echo "${!DEV_TOOLS[@]}"
+    fi
 }
 
 # 创建开发工具软链接
@@ -857,11 +871,13 @@ setup_configured_dev_symlinks() {
     # 初始化工具配置
     init_dev_tools
     
-    # 为所有配置的工具创建软链接
+    # 为所有配置的工具创建软链接 (跳过homebrew，因为它已经在系统位置)
     for tool_name in $(get_all_tools); do
-        create_dev_link "$tool_name" "$external_dev_path"
+        if [ "$tool_name" != "homebrew" ]; then
+            create_dev_link "$tool_name" "$external_dev_path"
+        fi
     done
-    
+
     log_success "配置文件指定的开发工具目录软链接设置完成"
 }
 
@@ -903,17 +919,23 @@ show_dev_directory_menu() {
             default_path="$config_path"
         fi
     fi
-    
+
     echo -e "\n${YELLOW}开发目录管理:${NC}"
     echo "为了节省系统盘空间，建议将开发相关目录链接到外部存储"
     echo ""
     echo "将会设置以下目录的软链接:"
     echo "  • ~/.dev        -> 外部存储/dev"
+    echo "  • ~/.cache      -> 外部存储/dev/cache"
     echo "  • ~/.go         -> 外部存储/dev/go"
     echo "  • ~/.cargo     -> 外部存储/dev/cargo"
     echo "  • ~/.nvm       -> 外部存储/dev/nvm"
     echo "  • ~/.pip       -> 外部存储/dev/pip"
     echo "  • ~/.m2        -> 外部存储/dev/m2"
+    echo "  • ~/.gradle    -> 外部存储/dev/gradle"
+    echo "  • ~/.cocoapods -> 外部存储/dev/cocoapods"
+    echo "  • ~/.android   -> 外部存储/dev/android"
+    echo "  • ~/.npm       -> 外部存储/dev/npm"
+    echo "  • ~/.rustup    -> 外部存储/dev/rustup"
     echo "  • ~/.pyenv     -> 外部存储/dev/pyenv"
     echo "  • ~/.rbenv     -> 外部存储/dev/rbenv"
     echo ""

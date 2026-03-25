@@ -68,7 +68,6 @@
       "default_external_path": "/Volumes/1T/dev",
       "detect_existing": true,
       "tools": {
-        "homebrew": "/opt/homebrew",
         "go": "$HOME/.go",
         "cargo": "$HOME/.cargo",
         "nvm": "$HOME/.nvm",
@@ -77,8 +76,11 @@
         "gradle": "$HOME/.gradle",
         "pyenv": "$HOME/.pyenv",
         "rbenv": "$HOME/.rbenv",
-        "flutter": "$HOME/.dev/flutter",
-        "cocoapods": "$HOME/.cocoapods"
+        "cocoapods": "$HOME/.cocoapods",
+        "cache": "$HOME/.cache",
+        "android": "$HOME/.android",
+        "npm": "$HOME/.npm",
+        "rustup": "$HOME/.rustup"
       }
     }
   }

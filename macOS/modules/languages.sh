@@ -100,14 +100,13 @@ install_nodejs() {
     # 安装最新LTS版本
     nvm install --lts
     nvm use --lts
-    nvm alias default lts/*
     
     # 配置npm镜像
     npm config set registry https://registry.npmmirror.com
-    npm config set disturl https://npmmirror.com/dist
-    npm config set electron_mirror https://npmmirror.com/mirrors/electron/
-    npm config set sass_binary_site https://npmmirror.com/mirrors/node-sass/
-    npm config set phantomjs_cdnurl https://npmmirror.com/mirrors/phantomjs/
+    #npm config set disturl https://npmmirror.com/dist
+    #npm config set electron_mirror https://npmmirror.com/mirrors/electron/
+    #npm config set sass_binary_site https://npmmirror.com/mirrors/node-sass/
+    #npm config set phantomjs_cdnurl https://npmmirror.com/mirrors/phantomjs/
     
     # 安装全局包管理器
     npm install -g pnpm yarn

@@ -209,6 +209,15 @@ export OLLAMA_MIRROR=https://mirror.aliyun.com/ollama
 ## uv
 export UV_DEFAULT_INDEX="https://pypi.tuna.tsinghua.edu.cn/simple"
 
+## openclaw/searxng
+export SEARXNG_URL=http://localhost:28080
+searxng() {
+  local query="$*"
+  local url="${SEARXNG_URL:-http://localhost:8080}"
+  curl -s "${url}/search?q=$(echo "$query" | sed 's/ /+/g')&format=json" | \
+    jq -r '.results[:10][] | "[\(.score | floor)] \(.title)\n    \(.url)\n    \(.content // "No description")\n"'
+}
+
 # 开发工具别名
 alias ll='ls -la'
 alias la='ls -A'
