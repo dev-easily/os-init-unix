@@ -1,8 +1,8 @@
 #!/bin/bash
 # 系统初始化模块
 
-# 导入通用函数
-source "$(dirname "$0")/common.sh"
+# 导入通用函数 (使用 BASH_SOURCE 兼容 source 引入模式)
+source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
 # Homebrew安装和配置
 install_homebrew() {
