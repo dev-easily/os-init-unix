@@ -182,18 +182,6 @@ wait_for_key() {
     echo
 }
 
-# 检查网络连接
-check_network() {
-    log_info "检查网络连接..."
-    if ping -c 1 -W 3000 google.com >/dev/null 2>&1 || ping -c 1 -W 3000 baidu.com >/dev/null 2>&1; then
-        log_success "网络连接正常"
-        return 0
-    else
-        log_warning "网络连接检查失败，但将继续安装"
-        return 0  # 不阻止安装过程
-    fi
-}
-
 # 检查磁盘空间
 check_disk_space() {
     local required_gb=${1:-10}
@@ -596,7 +584,14 @@ set_error_handling() {
 # 显示系统信息
 show_system_info() {
     echo -e "${CYAN}系统信息:${NC}"
-    echo "操作系统: $(sw_vers -productName) $(sw_vers -productVersion)"
+    if is_macos; then
+        echo "操作系统: macOS $(sw_vers -productVersion)"
+    elif is_ubuntu; then
+        local version=$(grep DISTRIB_RELEASE /etc/os-release | cut -d= -f2)
+        echo "操作系统: Ubuntu $version"
+    else
+        echo "操作系统: $(uname -s)"
+    fi
     echo "架构: $(uname -m)"
     echo "内核: $(uname -r)"
     echo "用户: $(whoami)"

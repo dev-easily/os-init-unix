@@ -68,9 +68,6 @@ system_check() {
         check_xcode_tools
     fi
 
-    # 检查网络连接
-    check_network
-
     # 检测并安装git (如果不存在)
     ensure_git_installed
 
@@ -79,7 +76,7 @@ system_check() {
 
 # 设置镜像源
 setup_mirrors() {
-    log_info "配置镜像源..."
+    log_info "设置安装过程中的临时镜像源..."
 
     # Homebrew镜像
     export HOMEBREW_INSTALL_FROM_API=1
