@@ -73,12 +73,17 @@ elif [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
   \. "/opt/homebrew/opt/nvm/nvm.sh"
 fi
 
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+[ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"
+
 # NVM bash completion
 if [ -s "$HOME/.nvm/bash_completion" ]; then
   \. "$HOME/.nvm/bash_completion"
 elif [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ]; then
   \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 fi
+
+[ -s "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm"
 # endregion
 
 # region electron
