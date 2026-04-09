@@ -62,7 +62,8 @@ EOF
 
     # 安装常用工具
     log_info "安装 Rust 常用工具..."
-    cargo install cargo-update cargo-tree cargo-audit
+    cargo install crm
+    crm use ustc-sparse
 
     # 添加常用target
     rustup target add wasm32-unknown-unknown
