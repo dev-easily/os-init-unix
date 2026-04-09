@@ -53,7 +53,7 @@ install_homebrew() {
 	fi
 
 	# 下载并安装
-	run git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git brew-install
+	run git clone --depth=1 git@github.com:Homebrew/install.git brew-install
 	if [ "$DRY_RUN" != "true" ]; then
 		/bin/bash brew-install/install.sh
 		rm -rf brew-install
