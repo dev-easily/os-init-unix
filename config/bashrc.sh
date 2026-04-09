@@ -37,6 +37,13 @@ if is_macos; then
     eval $(/opt/homebrew/bin/brew shellenv)
   fi
 fi
+
+if is_ubuntu; then
+  # 支持外置开发目录的Homebrew
+  if [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  fi
+fi
 # endregion
 
 # region rust
