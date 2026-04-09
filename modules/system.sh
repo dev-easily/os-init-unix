@@ -127,17 +127,7 @@ EOF
 configure_shell() {
 	log_info "配置 Shell 环境..."
 
-	# 使用SCRIPT_DIR环境变量或者通过相对路径计算
-	local root_dir
-	if [ -n "${SCRIPT_DIR:-}" ]; then
-		# SCRIPT_DIR指向macOS目录，需要向上一级到项目根目录
-		root_dir="$(dirname "$SCRIPT_DIR")"
-	else
-		# 从modules目录向上两级到达项目根目录
-		root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")"/../../ && pwd)"
-	fi
-
-	local bashrc_source="$root_dir/config/bashrc.sh"
+	local bashrc_source="$SCRIPT_DIR/config/bashrc.sh"
 
 	# 直接复制配置文件
 	if [ -f "$bashrc_source" ]; then
@@ -192,7 +182,6 @@ install_basic_tools() {
 	log_info "安装基础工具..."
 
 	local tools=(
-		"bash"
 		"curl"
 		"wget"
 		"vim"
@@ -216,6 +205,7 @@ install_basic_tools() {
 		fi
 	else
 		tools+=("connect")
+		tools+=("bash")
 	fi
 
 	for tool in "${tools[@]}"; do
@@ -283,11 +273,11 @@ main() {
 		configure_dev_directory
 	fi
 
+	configure_shell
 	install_homebrew
 	install_basic_tools
 	install_docker
 	configure_git
-	configure_shell
 
 	if confirm_action "是否进行系统优化"; then
 		optimize_system
