@@ -66,6 +66,11 @@ is_macos() {
     [[ "$(uname)" == "Darwin" ]]
 }
 
+# 检查是否为Ubuntu
+is_ubuntu() {
+    [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" "/etc/os-release"
+}
+
 # 检查macOS版本
 get_macos_version() {
     sw_vers -productVersion
@@ -74,6 +79,55 @@ get_macos_version() {
 # 检查是否为Apple Silicon
 is_apple_silicon() {
     [[ "$(uname -m)" == "arm64" ]]
+}
+
+# 检测并确保git已安装
+ensure_git_installed() {
+    if command_exists git; then
+        log_info "Git 已安装: $(git --version)"
+        return 0
+    fi
+
+    log_info "Git 未安装，开始安装..."
+
+    if is_macos; then
+        # macOS 尝试通过 xcode-cli 安装 git
+        if xcode-select -p >/dev/null 2>&1; then
+            # Xcode CLI already installed, but git still missing?
+            # Try via brew later if needed
+            :
+        else
+            # Prompt user to install Xcode CLI which includes git
+            if confirm_action "需要安装 Xcode Command Line Tools (包含 Git)，是否继续"; then
+                if [ "$DRY_RUN" != "true" ]; then
+                    xcode-select --install
+                    log_info "请完成安装后重新运行脚本"
+                    exit 0
+                else
+                    log_info "[DRY-RUN] would run xcode-select --install"
+                fi
+            else
+                log_error "需要 Git 才能继续安装"
+                exit 1
+            fi
+        fi
+    elif is_ubuntu; then
+        # Ubuntu 使用 apt 安装 git
+        sudo_run apt update
+        sudo_run apt install -y git
+    fi
+
+    # Verify installation
+    if [ "$DRY_RUN" != "true" ] && command_exists git; then
+        log_success "Git 安装完成: $(git --version)"
+        return 0
+    elif [ "$DRY_RUN" = "true" ]; then
+        log_info "[DRY-RUN] would verify git installation"
+        return 0
+    else
+        log_error "Git 安装失败，请手动安装后重试"
+        exit 1
+    fi
 }
 
 # 确认操作
@@ -599,6 +653,32 @@ check_not_root() {
     fi
 }
 
+# 执行命令，支持dry-run模式
+# usage: run "command to execute"
+run() {
+    if [ "$DRY_RUN" = "true" ]; then
+        log_info "[DRY-RUN]  would execute: $*"
+        return 0
+    else
+        log_info "执行: $*"
+        "$@"
+        return $?
+    fi
+}
+
+# 检查root权限，如果需要sudo会提示
+# usage: sudo_run "command to execute"
+sudo_run() {
+    if [ "$DRY_RUN" = "true" ]; then
+        log_info "[DRY-RUN]  would execute with sudo: $*"
+        return 0
+    else
+        log_info "执行sudo: $*"
+        sudo "$@"
+        return $?
+    fi
+}
+
 # 检查Xcode Command Line Tools
 check_xcode_tools() {
     if ! xcode-select -p >/dev/null 2>&1; then
@@ -696,94 +776,38 @@ create_dev_symlink() {
     log_success "已创建 $tool_name 软链接: $home_path -> $external_path"
 }
 
-# 获取开发工具路径映射
-# 开发工具路径映射 - 从配置文件读取
-declare -gA DEV_TOOLS=()
-
-# 初始化开发工具配置
-init_dev_tools() {
-    if [ -z "${CONFIG_FILE:-}" ] || [ ! -f "${CONFIG_FILE:-}" ]; then
-        log_warning "配置文件不存在，使用默认工具配置"
-        # 默认配置
-        DEV_TOOLS=(
-            # ["homebrew"]="/opt/homebrew"
-            ["go"]="$HOME/.go"
-            ["cargo"]="$HOME/.cargo"
-            ["nvm"]="$HOME/.nvm"
-            ["pip"]="$HOME/.pip"
-            ["m2"]="$HOME/.m2"
-            ["gradle"]="$HOME/.gradle"
-            ["pyenv"]="$HOME/.pyenv"
-            ["rbenv"]="$HOME/.rbenv"
-            ["flutter"]="$HOME/.dev/flutter"
-        )
-        return
-    fi
-    
-    # 从配置文件读取工具配置
-    if command_exists jq; then
-        # 使用最简单可靠的方式：逐行读取所有key，用tr删除所有引号
-        local key value
-        for key in $(jq -r '.user_config.dev_directory.tools // {} | keys[]' "$CONFIG_FILE" 2>/dev/null); do
-            # 删除所有引号字符，这是最可靠的方法
-            key=$(echo "$key" | tr -d '"''"')
-            [ -z "$key" ] && continue
-            value=$(jq -r ".user_config.dev_directory.tools[\"$key\"]" "$CONFIG_FILE" 2>/dev/null)
-            [ -z "$value" ] && continue
-            [ "$value" = "null" ] && continue
-            # 删除所有引号字符
-            value=$(echo "$value" | tr -d '"''"')
-            # 展开环境变量
-            value=$(eval echo "$value")
-            DEV_TOOLS["$key"]="$value"
-        done
-    fi
-    
-    # 如果没有读取到任何工具配置，使用默认配置
-    if [ ${#DEV_TOOLS[@]} -eq 0 ]; then
-        log_warning "未找到工具配置，使用默认配置"
-        DEV_TOOLS=(
-            ["homebrew"]="/opt/homebrew"
-            ["go"]="$HOME/.go"
-            ["cargo"]="$HOME/.cargo"
-            ["nvm"]="$HOME/.nvm"
-            ["pip"]="$HOME/.pip"
-            ["m2"]="$HOME/.m2"
-            ["gradle"]="$HOME/.gradle"
-            ["pyenv"]="$HOME/.pyenv"
-            ["rbenv"]="$HOME/.rbenv"
-            ["flutter"]="$HOME/.dev/flutter"
-        )
-    fi
-}
-
-# 获取工具的本地路径
+# 获取工具的本地路径 - 使用兼容bash 3.2的方式，不使用关联数组
 get_tool_path() {
     local tool_name="$1"
-    
-    # 如果DEV_TOOLS为空，先初始化
-    if [ ${#DEV_TOOLS[@]} -eq 0 ]; then
-        init_dev_tools
-    fi
-    
-    echo "${DEV_TOOLS[$tool_name]:-}"
+
+    case "$tool_name" in
+        "go") echo "$HOME/.go" ;;
+        "cargo") echo "$HOME/.cargo" ;;
+        "nvm") echo "$HOME/.nvm" ;;
+        "pip") echo "$HOME/.pip" ;;
+        "m2") echo "$HOME/.m2" ;;
+        "gradle") echo "$HOME/.gradle" ;;
+        "pyenv") echo "$HOME/.pyenv" ;;
+        "rbenv") echo "$HOME/.rbenv" ;;
+        "cocoapods") echo "$HOME/.cocoapods" ;;
+        "cache") echo "$HOME/.cache" ;;
+        "android") echo "$HOME/.android" ;;
+        "npm") echo "$HOME/.npm" ;;
+        "rustup") echo "$HOME/.rustup" ;;
+        "flutter") echo "$HOME/.dev/flutter" ;;
+        *) echo "" ;;
+    esac
 }
 
 # 获取所有工具名
 get_all_tools() {
-    # 如果DEV_TOOLS为空，先初始化
-    if [ ${#DEV_TOOLS[@]} -eq 0 ]; then
-        init_dev_tools
-    fi
+    echo "go cargo nvm pip m2 gradle pyenv rbenv cocoapods cache android npm rustup flutter"
+}
 
-    # 兼容 bash 和 zsh 获取关联数组键
-    if [ -n "$ZSH_VERSION" ]; then
-        # zsh
-        echo "${(k)DEV_TOOLS}"
-    else
-        # bash
-        echo "${!DEV_TOOLS[@]}"
-    fi
+# 初始化开发工具配置 (现在不需要初始化了，保持兼容API)
+init_dev_tools() {
+    log_info "使用默认工具配置"
+    return 0
 }
 
 # 创建开发工具软链接
@@ -911,14 +935,8 @@ check_external_storage() {
 
 # 显示开发目录设置菜单
 show_dev_directory_menu() {
-    # 从配置文件读取默认路径
+    # 默认路径
     local default_path="/Volumes/1T/dev"
-    if command_exists jq && [ -f "$CONFIG_FILE" ]; then
-        local config_path=$(jq -r '.user_config.dev_directory.default_external_path // "/Volumes/1T/dev"' "$CONFIG_FILE" 2>/dev/null)
-        if [ "$config_path" != "null" ] && [ -n "$config_path" ]; then
-            default_path="$config_path"
-        fi
-    fi
 
     echo -e "\n${YELLOW}开发目录管理:${NC}"
     echo "为了节省系统盘空间，建议将开发相关目录链接到外部存储"
@@ -940,7 +958,7 @@ show_dev_directory_menu() {
     echo "  • ~/.rbenv     -> 外部存储/dev/rbenv"
     echo ""
     echo "外部存储路径选项:"
-    echo "1. $default_path (配置文件默认)"
+    echo "1. $default_path (默认)"
     echo "2. /Volumes/External/dev"
     echo "3. 自定义路径"
     echo "4. 跳过设置"
@@ -949,29 +967,14 @@ show_dev_directory_menu() {
 
 # 配置开发目录
 configure_dev_directory() {
-    # 从配置文件读取设置
+    # 默认路径
     local default_path="/Volumes/1T/dev"
-    
-    if command_exists jq && [ -f "$CONFIG_FILE" ]; then
-        # 读取配置文件设置
-        local config_enabled=$(jq -r '.user_config.dev_directory.enabled // true' "$CONFIG_FILE" 2>/dev/null)
-        local config_path=$(jq -r '.user_config.dev_directory.default_external_path // "/Volumes/1T/dev"' "$CONFIG_FILE" 2>/dev/null)
-        
-        if [ "$config_enabled" = "false" ]; then
-            log_info "开发目录管理已在配置文件中禁用"
-            return 0
-        fi
-        
-        if [ "$config_path" != "null" ] && [ -n "$config_path" ]; then
-            default_path="$config_path"
-        fi
-    fi
-    
+
     show_dev_directory_menu
     read -r choice
-    
+
     local external_dev_path=""
-    
+
     case $choice in
         1)
             external_dev_path="$default_path"
@@ -992,31 +995,29 @@ configure_dev_directory() {
             return 1
             ;;
     esac
-    
+
     # 检查外部存储
     if ! check_external_storage "$(dirname "$external_dev_path")"; then
         return 1
     fi
-    
+
     # 初始化工具配置并显示将要管理的工具
     init_dev_tools
     local tools_list=($(get_all_tools))
-    
+
     # 确认设置
     echo -e "\n${CYAN}将设置开发目录到: $external_dev_path${NC}"
     echo -e "${CYAN}将管理以下工具: ${tools_list[*]}${NC}"
-    
+
     if confirm_action "确认设置开发目录软链接"; then
         setup_dev_directory "$external_dev_path"
-        
+
         # 检测已存在的软件
-        if [ "$(read_config '.user_config.dev_directory.detect_existing // true')" = "true" ]; then
-            detect_existing_software "$external_dev_path"
-        fi
-        
-        # 使用配置文件中的工具列表设置软链接
+        detect_existing_software "$external_dev_path"
+
+        # 使用配置好的工具列表设置软链接
         setup_configured_dev_symlinks "$external_dev_path"
-        
+
         # 保存配置到环境文件
         local shell_rc="$HOME/.dev_rc"
         if ! grep -q "DEV_EXTERNAL_PATH" "$shell_rc" 2>/dev/null; then

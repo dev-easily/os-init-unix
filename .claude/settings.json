@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod +x /Volumes/1T/Projects/os-init-unix/install.sh)",
+      "Bash(find /Volumes/1T/Projects/os-init-unix/ -name \"*.sh\" -exec chmod +x {} \\\\;)",
+      "Bash(git clean:*)"
+    ]
+  }
+}

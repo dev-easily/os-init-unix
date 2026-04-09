@@ -87,7 +87,7 @@ install_nodejs() {
     
     if ! command -v nvm >/dev/null 2>&1; then
         # 使用Homebrew安装nvm
-        brew install nvm
+        run brew install nvm
         
         # 加载nvm
         export NVM_DIR="$HOME/.nvm"
@@ -143,7 +143,7 @@ install_python() {
     fi
     
     # 安装pyenv
-    brew install pyenv pyenv-virtualenv
+    run brew install pyenv pyenv-virtualenv
     
     # 重新加载环境
     export PYENV_ROOT="$HOME/.pyenv"
@@ -204,7 +204,7 @@ install_golang() {
     fi
     
     # 使用Homebrew安装Go
-    brew install go
+    run brew install go
     
     # 重新加载环境
     export GOPATH=$HOME/.go
@@ -258,13 +258,13 @@ install_java() {
     for version in "${java_versions[@]}"; do
         if ! brew list "$version" &>/dev/null; then
             log_info "安装 $version..."
-            brew install "$version"
+            run brew install "$version"
         fi
     done
     
     # 配置Maven
     if ! command -v mvn >/dev/null 2>&1; then
-        brew install maven
+        run brew install maven
     fi
     
     ensure_dev_dir ~/.m2 "m2"
@@ -276,7 +276,7 @@ install_java() {
     
     # 安装Gradle
     if ! command -v gradle >/dev/null 2>&1; then
-        brew install gradle
+        run brew install gradle
     fi
     
     log_success "Java 安装完成"
@@ -292,7 +292,7 @@ install_php() {
     log_info "安装 PHP..."
     
     # 安装PHP和常用扩展
-    brew install php composer
+    run brew install php composer
     
     # 配置Composer镜像
     composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
@@ -321,7 +321,7 @@ install_ruby() {
     fi
     
     # 安装rbenv
-    brew install rbenv ruby-build
+    run brew install rbenv ruby-build
     
     # 重新加载环境
     eval "$(rbenv init -)"
@@ -394,7 +394,7 @@ install_flutter() {
         
         # 安装CocoaPods (iOS开发需要)
         if ! command -v pod >/dev/null 2>&1; then
-            brew install cocoapods
+            run brew install cocoapods
               cd ~/.cocoapods/repos
               pod repo remove master
               git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git master
