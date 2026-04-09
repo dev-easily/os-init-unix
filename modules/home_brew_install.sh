@@ -983,7 +983,7 @@ ohai "Downloading and installing Homebrew..."
     execute "${USABLE_GIT}" "update-ref" "-d" "refs/remotes/origin/master"
   fi
 
-  execute "${USABLE_GIT}" "remote" "set-head" "origin" "--auto" >/dev/null
+  execute "${USABLE_GIT}" "remote" "set-head" "origin" "main" >/dev/null
 
   LATEST_GIT_TAG="$("${USABLE_GIT}" -c "column.ui=never" tag --list --sort="-version:refname" | head -n1)"
   if [[ -z "${LATEST_GIT_TAG}" ]]
@@ -1019,7 +1019,7 @@ ohai "Downloading and installing Homebrew..."
       execute "${USABLE_GIT}" "config" "--bool" "core.symlinks" "true"
       retry 5 "${USABLE_GIT}" "fetch" "--force" "${quiet_progress[@]}" \
         "origin" "refs/heads/main:refs/remotes/origin/main"
-      execute "${USABLE_GIT}" "remote" "set-head" "origin" "--auto" >/dev/null
+      execute "${USABLE_GIT}" "remote" "set-head" "origin" "main" >/dev/null
       execute "${USABLE_GIT}" "reset" "--hard" "origin/main"
 
       cd "${HOMEBREW_REPOSITORY}" >/dev/null || return

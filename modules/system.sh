@@ -53,10 +53,8 @@ install_homebrew() {
 	fi
 
 	# 下载并安装
-	run git clone --depth=1 git@github.com:Homebrew/install.git brew-install
 	if [ "$DRY_RUN" != "true" ]; then
-		/bin/bash brew-install/install.sh
-		rm -rf brew-install
+		/bin/bash "$(dirname "${BASH_SOURCE[0]}")/home_brew_install.sh"
 	else
 		log_info "[DRY-RUN] would run brew install script"
 	fi
