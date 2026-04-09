@@ -244,7 +244,7 @@ install_docker() {
 			log_info "[DRY-RUN] would add Docker apt repository"
 		fi
 		sudo_run apt update
-		sudo_run apt install -y docker-ce docker-ce-cli containerd.io
+		sudo_run apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 		log_success "Docker 安装完成，请重新登录后使用"
 	fi
 }
